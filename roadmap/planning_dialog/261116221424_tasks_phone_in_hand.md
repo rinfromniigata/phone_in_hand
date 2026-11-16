@@ -1,6 +1,6 @@
 # phone_in_hand 実装タスク（tasks）
 
-設計：`261116193710_imple_phone_in_hand.md`。検証：`261116193710_walk_phone_in_hand.md`。
+設計：`261116221424_imple_phone_in_hand.md`。検証：`261116221424_walk_phone_in_hand.md`。
 各Phaseは、Tn → Wn → 修正と再検証 → Wnがすべて通過したらPhase n+1、の順に進める。
 
 ## Phase 1: 基盤
@@ -42,14 +42,19 @@ Phaseの推奨: Opus・high以上
 
 ## Phase 2: ホームと設定
 Phaseの推奨: Sonnet・high以上
-- [ ] T2-1 【エージェント】ホームを実装する：VRに表示のスイッチ、5つの状態の行（色と文字の両方）、映像のプレビュー、位置を合わせ直すボタン
+引き継ぎ: Phase 2は完了（W2-1〜W2-3通過）。次はT3-1。開発用の切り替え（右下のDEV）を開くと、右下の保存・位置を合わせ直すボタンに重なる（開発時だけ）。映像のフレームの受け取り（`preview_frame`）はT4-2でつなぐ（`VideoPreview`の`frameUrl`）
+- [x] T2-1 【エージェント】ホームを実装する：VRに表示のスイッチ、5つの状態の行（色と文字の両方）、映像のプレビュー、位置を合わせ直すボタン
   - 依存: T1-7
   - 画面: S02, S02a, S02b, S02c
   - 位置を合わせ直すボタンの遷移先（S01e）はT3-8でつなぐ。T2-1では配置だけを行い、押せない状態にする
-- [ ] T2-2 【エージェント】設定を実装する：タブ（表示・位置・入力・VRChat・一般）、保存、言語とテーマの即時の適用。一般タブの末尾にライセンスのリンクとダイアログ（スペック9a節。一覧は`src/lib/licenses`の一覧ファイルから表示する）
+  - 実施: Sonnet・high
+  - メモ: 状態の行は`src/lib/state/status_rows.ts`（`AppSnapshot`→行と帯。S02a〜cの見本と一致することを単体テストで確認）。iPhoneのときはセンサーとワイヤレスデバッグの行を「使用できません」にする（S02c）。映像のプレビューは枠と空の状態まで（フレームの受け取りはT4-2）。開発用の見本のときだけ、見本の絵（`src/lib/dev/FakeScreen.svelte`）を出す。モックにない文言を6キー足した（`home.detail.adb_not_used`ほか）。位置合わせの結果が古いこと（`calibration: stale`）の表示はT3-8で扱う
+- [x] T2-2 【エージェント】設定を実装する：タブ（表示・位置・入力・VRChat・一般）、保存、言語とテーマの即時の適用。一般タブの末尾にライセンスのリンクとダイアログ（スペック9a節。一覧は`src/lib/licenses`の一覧ファイルから表示する）
   - 依存: T1-7
   - 画面: S03, S03a, S03b, S03c
   - S04dとアバター用パッケージの要素は表示しない（スペック9a節）。取り込み方法を変えたときの映像のページはT3-7・T4-2・T7-3で、ロック解除の案内はT6-3でつなぐ
+  - 実施: Sonnet・high
+  - メモ: 表示・位置・入力・VRChatは下書き（`src/lib/state/settings_draft.ts`）で、保存で変えた項目だけを`update_settings`へ送る。一般は変えた時点で保存して適用する（S03cに保存ボタンがないため）。`src/lib/licenses/licenses.ts`を新設し、著作権表示は依存のLICENSEとscrcpyのREADMEで照合した（scrcpy-serverはPhase 6で同梱する）。`settings.vrchat.open_package`の辞書キーは、スペック9a節で表示しないため削除した。ロック解除の案内のリンクは押せない状態。位置の基準と側は「位置」、入力の2つは「入力」のタブに置いた（モックのS03aは表示タブに全項目を描いている。仕様変更でスペック9a節に反映：`development/261116220850_change_settings_tabs.md`）。fix: `roadmap/development/261116215733_fix_phase2.md`（Tauri外の設定変更の失敗）
 
 ## Phase 3: オーバーレイの縦切りと位置合わせ
 Phaseの推奨: Opus・high以上

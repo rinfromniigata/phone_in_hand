@@ -1,6 +1,6 @@
 # phone_in_hand 実装設計（imple）
 
-正本：`roadmap/specs/phone_in_hand_SPEC_v1.md`（振る舞い・要件）、`phone_in_hand_tokens_v1.css`（値）、`phone_in_hand_mock_{画面ID}_v1.html`（画面構成）。この文書は、それらから導いた設計で、値と文言を複写しない。
+正本：`roadmap/specs/phone_in_hand_SPEC_v2.md`（振る舞い・要件）、`phone_in_hand_tokens_v2.css`（値）、`phone_in_hand_mock_{画面ID}_v2.html`（画面構成）。この文書は、それらから導いた設計で、値と文言を複写しない。
 
 ## 1. リポジトリ構成
 
@@ -131,7 +131,7 @@ pub trait SettingsStore: Send {
   - S01（初回セットアップ）：`routes/setup`。ステップ表示（映像→スマホ→VRChat→位置合わせ）と各ステップのページ。映像のページ（S01a・S01b・S01f・S01g）とS01hは、設定から単独でも開ける（S03aで取り込み方法を変えたとき、S03cの「ロック解除の案内」）
   - S01e（位置合わせ）：セットアップの最後のステップ。ホームの「位置を合わせ直す」からも単独で開ける
   - S02（ホーム）：表示のスイッチ、5つの状態の行、映像のプレビュー、位置を合わせ直す
-  - S03（設定）：タブ（表示・位置・入力・VRChat・一般）。保存で`update_settings`を呼ぶ。S03cの末尾にライセンスのリンク（スペック9a節）
+  - S03（設定）：タブ（表示・位置・入力・VRChat・一般）。項目の振り分けはスペック9a節（表示：パネルの大きさ・明るさ・取り込み方法・切り抜き、位置：位置の基準・側、入力：`input.*`、VRChat：`vrchat.*`、一般：`general.*`）。表示・位置・入力・VRChatは下書きを持ち、保存で変えた項目だけを`update_settings`に送る。一般は変えた時点で保存して適用する。S03cの末尾にライセンスのリンク（スペック9a節）
   - S04（VR内の表示）：PCの画面ではなくオーバーレイの見え方。状態のチップ（追跡中・センサー途絶・追跡が切れた・画面が消えた）の文言は辞書から引き、オーバーレイに描く（S04dは初版のスコープ外）
 - **開発用の状態の見本**：疑似ロケールと同じく開発時だけ有効な切り替えで、`AppSnapshot`の見本（S02a・S02b・S02c）をUIに流し、機器なしで状態の表示を確かめられるようにする。公開版には含めない
 
@@ -145,7 +145,7 @@ pub trait SettingsStore: Send {
 
 ## 5. トークン
 
-- `roadmap/specs/phone_in_hand_tokens_v1.css`を`src/lib/theme/tokens.css`へコピーする。checkコマンドで両者が一致することを確かめる
+- `roadmap/specs/phone_in_hand_tokens_v2.css`を`src/lib/theme/tokens.css`へコピーする。checkコマンドで両者が一致することを確かめる
 - Android：`scripts/gen_android_tokens.ts`で`tokens.css`から`android/.../theme/Tokens.kt`（Composeの色・寸法）を生成する。checkコマンドで、生成物が最新であることを確かめる
 - `brand.md`と`icon_master.svg`は`docs/brand/`へ版番号なしでコピーする
 

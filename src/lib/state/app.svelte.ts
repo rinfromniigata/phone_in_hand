@@ -81,7 +81,8 @@ class AppStore {
 		if (inTauri()) {
 			this.settings = await api.updateSettings(patch);
 		} else {
-			this.settings = mergePatch(clone(this.settings), patch) as Settings;
+			// $state のプロキシは structuredClone できないため、素のオブジェクトにしてから当てる
+			this.settings = mergePatch($state.snapshot(this.settings), patch) as Settings;
 		}
 		return this.settings;
 	}
