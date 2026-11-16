@@ -1,0 +1,988 @@
+<!DOCTYPE html>
+<html lang="ja" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>phone_in_hand モック S01 初回セットアップ</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;600&family=IBM+Plex+Sans+JP:wght@400;600&family=IBM+Plex+Mono:wght@400&family=Noto+Sans+SC:wght@400;600&display=swap">
+<style>
+/*
+ * phone_in_hand トークン（IBM Carbon Design System v11 準拠）
+ * --cds-* は Carbon のトークン名と値（ダーク：g100、ライト：white）に合わせる。
+ * --pih-* はこのアプリ固有の値（寸法、書体の切り替え、VR内の見本の色）。
+ */
+:root {
+  /* ---- 色：g100（ダーク、既定） ---- */
+  --cds-background: #161616;
+  --cds-background-hover: rgba(141, 141, 141, 0.16);
+  --cds-layer-01: #262626;
+  --cds-layer-02: #393939;
+  --cds-layer-hover-01: #333333;
+  --cds-layer-selected-01: #393939;
+  --cds-field-01: #262626;
+  --cds-field-02: #393939;
+  --cds-border-subtle-01: #393939;
+  --cds-border-strong-01: #6f6f6f;
+  --cds-border-interactive: #4589ff;
+  --cds-border-disabled: rgba(141, 141, 141, 0.5);
+  --cds-text-primary: #f4f4f4;
+  --cds-text-secondary: #c6c6c6;
+  --cds-text-helper: #a8a8a8;
+  --cds-text-placeholder: rgba(244, 244, 244, 0.4);
+  --cds-text-disabled: rgba(244, 244, 244, 0.25);
+  --cds-text-on-color: #ffffff;
+  --cds-link-primary: #78a9ff;
+  --cds-link-primary-hover: #a6c8ff;
+  --cds-interactive: #4589ff;
+  --cds-button-primary: #0f62fe;
+  --cds-button-primary-hover: #0050e6;
+  --cds-button-secondary: #6f6f6f;
+  --cds-button-secondary-hover: #606060;
+  --cds-button-disabled: rgba(141, 141, 141, 0.3);
+  --cds-focus: #ffffff;
+  --cds-focus-inset: #161616;
+  --cds-support-success: #42be65;
+  --cds-support-warning: #f1c21b;
+  --cds-support-error: #fa4d56;
+  --cds-support-info: #4589ff;
+  --cds-toggle-off: #6f6f6f;
+  --cds-icon-on-color: #ffffff;
+  --cds-overlay: rgba(0, 0, 0, 0.65);
+
+  /* ---- 余白（Carbon spacing scale） ---- */
+  --cds-spacing-01: 2px;
+  --cds-spacing-02: 4px;
+  --cds-spacing-03: 8px;
+  --cds-spacing-04: 12px;
+  --cds-spacing-05: 16px;
+  --cds-spacing-06: 24px;
+  --cds-spacing-07: 32px;
+  --cds-spacing-08: 40px;
+  --cds-spacing-09: 48px;
+  --cds-spacing-10: 64px;
+
+  /* ---- タイポグラフィ（Carbon type tokens。書体はロケールごとに切り替える） ---- */
+  --pih-font-family-sans: "IBM Plex Sans", "Helvetica Neue", Arial, sans-serif;
+  --pih-font-family-mono: "IBM Plex Mono", "Menlo", "Consolas", monospace;
+  --cds-label-01-font-size: 12px;
+  --cds-label-01-line-height: 16px;
+  --cds-label-01-letter-spacing: 0.32px;
+  --cds-helper-text-01-font-size: 12px;
+  --cds-helper-text-01-line-height: 16px;
+  --cds-body-01-font-size: 14px;
+  --cds-body-01-line-height: 20px;
+  --cds-body-01-letter-spacing: 0.16px;
+  --cds-heading-compact-01-font-size: 14px;
+  --cds-heading-compact-01-line-height: 18px;
+  --cds-heading-02-font-size: 16px;
+  --cds-heading-02-line-height: 24px;
+  --cds-heading-03-font-size: 20px;
+  --cds-heading-03-line-height: 28px;
+  --cds-heading-04-font-size: 28px;
+  --cds-heading-04-line-height: 36px;
+  --pih-font-weight-regular: 400;
+  --pih-font-weight-semibold: 600;
+
+  /* ---- モーション（Carbon productive） ---- */
+  --cds-duration-fast-01: 70ms;
+  --cds-duration-fast-02: 110ms;
+  --cds-duration-moderate-01: 150ms;
+  --cds-duration-moderate-02: 240ms;
+  --cds-easing-productive-standard: cubic-bezier(0.2, 0, 0.38, 0.9);
+
+  /* ---- 形と線 ---- */
+  --pih-radius-none: 0;
+  --pih-radius-full: 999px;
+  --pih-radius-device: 28px;
+  --pih-border-width: 1px;
+  --pih-focus-width: 2px;
+  --pih-accent-border-width: 3px;
+
+  /* ---- 寸法 ---- */
+  --pih-control-height: 40px;
+  --pih-header-height: 48px;
+  --pih-titlebar-height: 32px;
+  --pih-rail-width: 48px;
+  --pih-icon-size: 20px;
+  --pih-toggle-width: 48px;
+  --pih-toggle-height: 24px;
+  --pih-toggle-knob: 18px;
+  --pih-status-dot: 8px;
+  --pih-desktop-window-width: 960px;
+  --pih-desktop-window-height: 680px;
+  --pih-phone-width: 360px;
+  --pih-phone-height: 740px;
+
+  /* ---- VR内の見本（イラストだけに使う） ---- */
+  --pih-vr-sky-top: #1c2533;
+  --pih-vr-sky-bottom: #0b0e12;
+  --pih-hand: #c9b8a6;
+}
+
+/* ---- 色：white（ライト） ---- */
+:root[data-theme="light"] {
+  --cds-background: #ffffff;
+  --cds-background-hover: rgba(141, 141, 141, 0.12);
+  --cds-layer-01: #f4f4f4;
+  --cds-layer-02: #ffffff;
+  --cds-layer-hover-01: #e8e8e8;
+  --cds-layer-selected-01: #e0e0e0;
+  --cds-field-01: #f4f4f4;
+  --cds-field-02: #ffffff;
+  --cds-border-subtle-01: #c6c6c6;
+  --cds-border-strong-01: #8d8d8d;
+  --cds-border-interactive: #0f62fe;
+  --cds-border-disabled: #c6c6c6;
+  --cds-text-primary: #161616;
+  --cds-text-secondary: #525252;
+  --cds-text-helper: #6f6f6f;
+  --cds-text-placeholder: rgba(22, 22, 22, 0.4);
+  --cds-text-disabled: rgba(22, 22, 22, 0.25);
+  --cds-text-on-color: #ffffff;
+  --cds-link-primary: #0f62fe;
+  --cds-link-primary-hover: #0043ce;
+  --cds-interactive: #0f62fe;
+  --cds-button-primary: #0f62fe;
+  --cds-button-primary-hover: #0050e6;
+  --cds-button-secondary: #393939;
+  --cds-button-secondary-hover: #474747;
+  --cds-button-disabled: #c6c6c6;
+  --cds-focus: #0f62fe;
+  --cds-focus-inset: #ffffff;
+  --cds-support-success: #24a148;
+  --cds-support-warning: #f1c21b;
+  --cds-support-error: #da1e28;
+  --cds-support-info: #0043ce;
+  --cds-toggle-off: #8d8d8d;
+  --cds-overlay: rgba(22, 22, 22, 0.5);
+}
+
+/* ---- 書体：ロケールごと（日本語と中国語は字形が異なるため分ける） ---- */
+:root:lang(ja) { --pih-font-family-sans: "IBM Plex Sans JP", "IBM Plex Sans", "Yu Gothic UI", sans-serif; }
+:root:lang(en) { --pih-font-family-sans: "IBM Plex Sans", "Helvetica Neue", Arial, sans-serif; }
+:root:lang(zh-Hans) { --pih-font-family-sans: "IBM Plex Sans SC", "Noto Sans SC", "IBM Plex Sans", "Microsoft YaHei UI", sans-serif; }
+
+
+/* ---- モック共通 ---- */
+* { box-sizing: border-box; }
+body {
+  margin: 0; background: var(--cds-background); color: var(--cds-text-primary);
+  font-family: var(--pih-font-family-sans); font-size: var(--cds-body-01-font-size);
+  line-height: var(--cds-body-01-line-height); letter-spacing: var(--cds-body-01-letter-spacing);
+}
+.mock-toolbar {
+  position: sticky; top: 0; z-index: 10; display: flex; flex-wrap: wrap; gap: var(--cds-spacing-05);
+  align-items: center; padding: var(--cds-spacing-03) var(--cds-spacing-06); min-height: var(--pih-header-height);
+  background: var(--cds-layer-01); border-bottom: var(--pih-border-width) solid var(--cds-border-subtle-01);
+}
+.mock-toolbar h1 { font-size: var(--cds-heading-compact-01-font-size); margin: 0; font-weight: var(--pih-font-weight-semibold); }
+.mock-note { color: var(--cds-text-secondary); font-size: var(--cds-label-01-font-size); flex: 1 1 240px; }
+.seg { display: inline-flex; align-self: flex-start; border: var(--pih-border-width) solid var(--cds-border-strong-01); }
+.seg button {
+  font: inherit; font-size: var(--cds-label-01-font-size); color: var(--cds-text-secondary); background: transparent;
+  border: 0; border-right: var(--pih-border-width) solid var(--cds-border-strong-01); padding: var(--cds-spacing-02) var(--cds-spacing-04); cursor: pointer;
+}
+.seg button:last-child { border-right: 0; }
+.seg button[aria-pressed="true"] { background: var(--cds-layer-selected-01); color: var(--cds-text-primary); }
+.mock-main { padding: var(--cds-spacing-07) var(--cds-spacing-06); display: flex; flex-direction: column; gap: var(--cds-spacing-09); }
+.screen { display: flex; flex-direction: column; gap: var(--cds-spacing-06); }
+.screen-head { display: flex; align-items: baseline; gap: var(--cds-spacing-04); border-bottom: var(--pih-border-width) solid var(--cds-border-subtle-01); padding-bottom: var(--cds-spacing-03); }
+.screen-id { font-family: var(--pih-font-family-mono); color: var(--cds-link-primary); }
+.screen-name { font-size: var(--cds-heading-03-font-size); line-height: var(--cds-heading-03-line-height); font-weight: var(--pih-font-weight-regular); margin: 0; }
+.screen-desc { color: var(--cds-text-secondary); font-size: var(--cds-label-01-font-size); margin: 0; }
+.states { display: flex; flex-wrap: wrap; gap: var(--cds-spacing-07); align-items: flex-start; }
+.state { display: flex; flex-direction: column; gap: var(--cds-spacing-03); }
+.state-label { font-size: var(--cds-label-01-font-size); color: var(--cds-text-secondary); }
+.state-label b { font-family: var(--pih-font-family-mono); color: var(--cds-link-primary); font-weight: var(--pih-font-weight-regular); margin-right: var(--cds-spacing-03); }
+
+/* ---- デスクトップウィンドウ（Carbon UI Shell 風） ---- */
+.win {
+  width: var(--pih-desktop-window-width); height: var(--pih-desktop-window-height);
+  background: var(--cds-background); border: var(--pih-border-width) solid var(--cds-border-strong-01);
+  overflow: hidden; display: flex; flex-direction: column;
+}
+.win-titlebar {
+  display: flex; align-items: center; gap: var(--cds-spacing-03); height: var(--pih-titlebar-height); flex: none;
+  padding-left: var(--cds-spacing-05); background: var(--cds-background); border-bottom: var(--pih-border-width) solid var(--cds-border-subtle-01);
+  font-size: var(--cds-label-01-font-size); color: var(--cds-text-secondary);
+}
+.win-titlebar .glyph { width: var(--cds-spacing-05); height: var(--cds-spacing-05); border: var(--pih-focus-width) solid var(--cds-text-primary); border-radius: var(--cds-spacing-02); }
+.win-titlebar .spacer { flex: 1; }
+.win-titlebar .ctl { width: var(--pih-header-height); text-align: center; color: var(--cds-text-helper); }
+.win-body { flex: 1; display: flex; min-height: 0; }
+.sidebar {
+  width: var(--pih-rail-width); flex: none; padding: 0;
+  background: var(--cds-background); border-right: var(--pih-border-width) solid var(--cds-border-subtle-01); display: flex; flex-direction: column;
+}
+.nav-item {
+  width: var(--pih-rail-width); height: var(--pih-rail-width); display: flex; align-items: center; justify-content: center;
+  color: var(--cds-text-secondary); cursor: pointer; border-left: var(--pih-accent-border-width) solid transparent;
+  border-right: var(--pih-accent-border-width) solid transparent; text-decoration: none;
+}
+.nav-item:hover { background: var(--cds-background-hover); color: var(--cds-text-primary); }
+.nav-item:focus-visible { outline: var(--pih-focus-width) solid var(--cds-focus); outline-offset: calc(var(--pih-focus-width) * -1); }
+.nav-item[aria-current="page"] { background: var(--cds-layer-selected-01); color: var(--cds-text-primary); border-left-color: var(--cds-border-interactive); }
+.nav-icon { width: var(--pih-icon-size); height: var(--pih-icon-size); }
+.content { flex: 1; padding: var(--cds-spacing-06); overflow: auto; display: flex; flex-direction: column; gap: var(--cds-spacing-05); min-width: 0; }
+.content h2 { margin: 0; font-size: var(--cds-heading-03-font-size); line-height: var(--cds-heading-03-line-height); font-weight: var(--pih-font-weight-regular); }
+.content p { margin: 0; color: var(--cds-text-secondary); }
+
+/* ---- 部品（Carbon） ---- */
+.btn {
+  font: inherit; font-size: var(--cds-body-01-font-size); height: var(--pih-control-height); min-width: calc(var(--cds-spacing-10) + var(--cds-spacing-07));
+  padding: 0 var(--cds-spacing-09) 0 var(--cds-spacing-05); text-align: left;
+  border: var(--pih-border-width) solid transparent; border-radius: var(--pih-radius-none);
+  background: var(--cds-button-secondary); color: var(--cds-text-on-color);
+  cursor: pointer; white-space: nowrap; transition: background var(--cds-duration-fast-02) var(--cds-easing-productive-standard);
+}
+.btn:hover, .btn.is-hover { background: var(--cds-button-secondary-hover); }
+.btn:focus-visible, .btn.is-focus { border-color: var(--cds-focus); box-shadow: inset 0 0 0 var(--pih-border-width) var(--cds-focus), inset 0 0 0 var(--pih-focus-width) var(--cds-focus-inset); outline: none; }
+.btn:disabled, .btn.is-disabled { background: var(--cds-button-disabled); color: var(--cds-text-disabled); cursor: not-allowed; }
+.btn-primary { background: var(--cds-button-primary); }
+.btn-primary:hover, .btn-primary.is-hover { background: var(--cds-button-primary-hover); }
+.btn-ghost { background: transparent; color: var(--cds-link-primary); padding: 0 var(--cds-spacing-05); min-width: 0; }
+.btn-ghost:hover, .btn-ghost.is-hover { background: var(--cds-background-hover); color: var(--cds-link-primary-hover); }
+.row { display: flex; gap: var(--cds-spacing-01); align-items: center; flex-wrap: wrap; }
+.row.loose { gap: var(--cds-spacing-04); }
+.row.end { justify-content: flex-end; margin-top: auto; }
+.field { display: flex; flex-direction: column; gap: var(--cds-spacing-03); }
+.field > span { font-size: var(--cds-label-01-font-size); line-height: var(--cds-label-01-line-height); letter-spacing: var(--cds-label-01-letter-spacing); color: var(--cds-text-secondary); }
+.select, .input {
+  font: inherit; height: var(--pih-control-height); padding: 0 var(--cds-spacing-05); border-radius: var(--pih-radius-none);
+  border: 0; border-bottom: var(--pih-border-width) solid var(--cds-border-strong-01);
+  background: var(--cds-field-01); color: var(--cds-text-primary); min-width: 0;
+}
+.card .select, .card .input { background: var(--cds-field-02); }
+.select.is-focus, .input.is-focus, .select:focus, .input:focus { outline: var(--pih-focus-width) solid var(--cds-focus); outline-offset: calc(var(--pih-focus-width) * -1); }
+.select.is-disabled, .input.is-disabled { color: var(--cds-text-disabled); border-bottom-color: transparent; }
+.input::placeholder { color: var(--cds-text-placeholder); }
+.mono { font-family: var(--pih-font-family-mono); }
+.switch { display: inline-flex; align-items: center; gap: var(--cds-spacing-03); cursor: pointer; font-size: var(--cds-body-01-font-size); }
+.switch i {
+  width: var(--pih-toggle-width); height: var(--pih-toggle-height); border-radius: var(--pih-radius-full); background: var(--cds-toggle-off);
+  position: relative; flex: none; transition: background var(--cds-duration-fast-02) var(--cds-easing-productive-standard);
+}
+.switch i::after {
+  content: ""; position: absolute; top: calc((var(--pih-toggle-height) - var(--pih-toggle-knob)) / 2); left: calc((var(--pih-toggle-height) - var(--pih-toggle-knob)) / 2);
+  width: var(--pih-toggle-knob); height: var(--pih-toggle-knob); border-radius: var(--pih-radius-full); background: var(--cds-icon-on-color);
+  transition: left var(--cds-duration-fast-02) var(--cds-easing-productive-standard);
+}
+.switch[aria-checked="true"] i { background: var(--cds-support-success); }
+.switch[aria-checked="true"] i::after { left: calc(var(--pih-toggle-width) - var(--pih-toggle-knob) - (var(--pih-toggle-height) - var(--pih-toggle-knob)) / 2); }
+.switch.is-disabled { color: var(--cds-text-disabled); cursor: not-allowed; }
+.switch.is-disabled i { background: var(--cds-button-disabled); }
+.card { background: var(--cds-layer-01); padding: var(--cds-spacing-05); display: flex; flex-direction: column; gap: var(--cds-spacing-04); min-width: 0; }
+.card h3 { margin: 0; font-size: var(--cds-heading-compact-01-font-size); line-height: var(--cds-heading-compact-01-line-height); font-weight: var(--pih-font-weight-semibold); }
+.dot { width: var(--pih-status-dot); height: var(--pih-status-dot); border-radius: var(--pih-radius-full); flex: none; background: var(--cds-border-strong-01); }
+.dot.ok { background: var(--cds-support-success); } .dot.warn { background: var(--cds-support-warning); } .dot.err { background: var(--cds-support-error); } .dot.info { background: var(--cds-support-info); }
+.status-list { display: flex; flex-direction: column; }
+.status-row { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: var(--cds-spacing-04); align-items: center; padding: var(--cds-spacing-04) 0; border-bottom: var(--pih-border-width) solid var(--cds-border-subtle-01); }
+.card .status-row { border-bottom-color: var(--cds-layer-02); }
+.status-row:last-child { border-bottom: 0; }
+.status-row .detail { display: block; color: var(--cds-text-helper); font-size: var(--cds-helper-text-01-font-size); line-height: var(--cds-helper-text-01-line-height); overflow-wrap: anywhere; }
+.status-row .state-text { font-size: var(--cds-label-01-font-size); color: var(--cds-text-secondary); text-align: right; }
+.banner {
+  display: flex; gap: var(--cds-spacing-04); align-items: flex-start; padding: var(--cds-spacing-04) var(--cds-spacing-05);
+  background: var(--cds-layer-01); border-left: var(--pih-accent-border-width) solid var(--cds-support-info);
+  font-size: var(--cds-body-01-font-size); line-height: var(--cds-body-01-line-height);
+}
+.banner.warn { border-left-color: var(--cds-support-warning); }
+.banner.err { border-left-color: var(--cds-support-error); }
+.banner.info { border-left-color: var(--cds-support-info); }
+.banner .dot { margin-top: var(--cds-spacing-02); }
+.card .banner { background: var(--cds-layer-02); }
+.steps { display: flex; gap: 0; flex-wrap: wrap; }
+.step {
+  display: flex; align-items: center; gap: var(--cds-spacing-03); font-size: var(--cds-label-01-font-size); color: var(--cds-text-helper);
+  padding: var(--cds-spacing-03) var(--cds-spacing-05) var(--cds-spacing-03) 0; min-width: calc(var(--cds-spacing-10) * 2);
+  border-top: var(--pih-accent-border-width) solid var(--cds-border-subtle-01); margin-right: var(--cds-spacing-01);
+}
+.step[data-state="current"] { color: var(--cds-text-primary); border-top-color: var(--cds-border-interactive); font-weight: var(--pih-font-weight-semibold); }
+.step[data-state="done"] { color: var(--cds-text-secondary); border-top-color: var(--cds-border-interactive); }
+.step .n { font-family: var(--pih-font-family-mono); }
+.preview {
+  aspect-ratio: 16 / 9; background: var(--cds-layer-01);
+  display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden;
+}
+.preview .crop { position: absolute; top: var(--cds-spacing-03); bottom: var(--cds-spacing-03); aspect-ratio: 9 / 19.5; border: var(--pih-focus-width) dashed var(--cds-interactive); }
+.preview.empty { color: var(--cds-text-helper); font-size: var(--cds-label-01-font-size); }
+.two-col { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: var(--cds-spacing-05); }
+.qr { width: calc(var(--cds-spacing-09) * 3); aspect-ratio: 1; flex: none; background:
+  repeating-linear-gradient(90deg, var(--cds-text-primary) 0 var(--cds-spacing-03), transparent var(--cds-spacing-03) var(--cds-spacing-05)),
+  repeating-linear-gradient(0deg, var(--cds-layer-01) 0 var(--cds-spacing-03), transparent var(--cds-spacing-03) calc(var(--cds-spacing-03) * 3));
+  border: var(--cds-spacing-03) solid var(--cds-text-primary); }
+.tabs { display: flex; }
+.tab {
+  padding: var(--cds-spacing-04) var(--cds-spacing-05) var(--cds-spacing-03); color: var(--cds-text-secondary); cursor: pointer;
+  border-bottom: var(--pih-focus-width) solid var(--cds-border-subtle-01); font-size: var(--cds-body-01-font-size); white-space: nowrap;
+}
+.tab[aria-selected="true"] { color: var(--cds-text-primary); border-bottom-color: var(--cds-border-interactive); font-weight: var(--pih-font-weight-semibold); }
+.tabs::after { content: ""; flex: 1; border-bottom: var(--pih-focus-width) solid var(--cds-border-subtle-01); }
+.form-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: var(--cds-spacing-06) var(--cds-spacing-05); }
+.range { width: 100%; accent-color: var(--cds-interactive); }
+.muted { color: var(--cds-text-helper); font-size: var(--cds-helper-text-01-font-size); line-height: var(--cds-helper-text-01-line-height); }
+.spinner { width: var(--cds-spacing-05); height: var(--cds-spacing-05); border-radius: var(--pih-radius-full); border: var(--pih-focus-width) solid var(--cds-layer-02); border-top-color: var(--cds-interactive); animation: spin 690ms linear infinite; flex: none; }
+@keyframes spin { to { transform: rotate(360deg); } }
+.link { color: var(--cds-link-primary); text-decoration: none; font-size: var(--cds-body-01-font-size); }
+.link:hover { color: var(--cds-link-primary-hover); text-decoration: underline; }
+.phone-preview { height: 100%; aspect-ratio: 9 / 19.5; margin: 0 auto; border-radius: var(--cds-spacing-05); border: var(--pih-border-width) solid var(--cds-border-strong-01); background: var(--cds-background); overflow: hidden; }
+
+/* ---- スマホ画面の見本（キャプチャ映像の代わり） ---- */
+.fake-screen { width: 100%; height: 100%; display: flex; flex-direction: column; gap: var(--cds-spacing-03); padding: var(--cds-spacing-04); background: var(--cds-layer-01); }
+.fake-screen .bar { height: var(--cds-spacing-06); border-radius: var(--pih-radius-full); background: var(--cds-layer-02); }
+.fake-screen .line { height: var(--cds-spacing-03); border-radius: var(--pih-radius-full); background: var(--cds-layer-02); }
+.fake-screen .line.s { width: 60%; } .fake-screen .line.m { width: 85%; }
+.fake-screen .block { height: var(--cds-spacing-09); background: var(--cds-layer-02); }
+.touch-dot { position: absolute; width: var(--cds-spacing-06); height: var(--cds-spacing-06); border-radius: var(--pih-radius-full); background: var(--cds-text-primary); opacity: 0.55; }
+
+/* ---- VR内の表示 ---- */
+.vr-scene {
+  width: var(--pih-desktop-window-width); height: calc(var(--pih-desktop-window-height) * 0.8);
+  background: linear-gradient(var(--pih-vr-sky-top), var(--pih-vr-sky-bottom)); position: relative; overflow: hidden;
+}
+.vr-scene .floor { position: absolute; left: 0; right: 0; bottom: 0; height: 35%; background: repeating-linear-gradient(90deg, transparent 0 calc(var(--cds-spacing-09) * 2 - 1px), var(--cds-border-subtle-01) 0 calc(var(--cds-spacing-09) * 2)); opacity: 0.5; }
+.vr-hand { position: absolute; }
+.vr-panel {
+  position: absolute; width: calc(var(--cds-spacing-09) * 3.2); aspect-ratio: 9 / 19.5; border-radius: var(--cds-spacing-05);
+  border: var(--cds-spacing-02) solid var(--pih-vr-sky-bottom); overflow: hidden; background: var(--cds-layer-01);
+}
+.vr-panel.dimmed { opacity: 0.45; }
+.vr-chip {
+  position: absolute; display: inline-flex; align-items: center; gap: var(--cds-spacing-03); padding: var(--cds-spacing-02) var(--cds-spacing-04);
+  border-radius: var(--pih-radius-full); background: var(--cds-layer-01);
+  font-size: var(--cds-label-01-font-size); color: var(--cds-text-secondary); white-space: nowrap;
+}
+.vr-caption { position: absolute; left: var(--cds-spacing-05); bottom: var(--cds-spacing-05); font-size: var(--cds-label-01-font-size); color: var(--cds-text-secondary); }
+
+/* ---- Androidアプリ ---- */
+.phone {
+  width: var(--pih-phone-width); height: var(--pih-phone-height); border-radius: var(--pih-radius-device);
+  border: var(--cds-spacing-03) solid var(--pih-vr-sky-bottom); outline: var(--pih-border-width) solid var(--cds-border-strong-01);
+  background: var(--cds-background); overflow: hidden; display: flex; flex-direction: column;
+}
+.phone-status { height: var(--cds-spacing-07); flex: none; display: flex; align-items: center; justify-content: space-between; padding: 0 var(--cds-spacing-06); font-size: var(--cds-label-01-font-size); color: var(--cds-text-secondary); }
+.phone-header { height: var(--pih-header-height); flex: none; display: flex; align-items: center; padding: 0 var(--cds-spacing-05); border-bottom: var(--pih-border-width) solid var(--cds-border-subtle-01); font-size: var(--cds-heading-compact-01-font-size); font-weight: var(--pih-font-weight-semibold); }
+.phone-body { flex: 1; padding: var(--cds-spacing-05); display: flex; flex-direction: column; gap: var(--cds-spacing-05); min-height: 0; }
+.btn-block { width: 100%; height: var(--pih-header-height); }
+.big-state { display: flex; flex-direction: column; align-items: flex-start; gap: var(--cds-spacing-03); padding: var(--cds-spacing-05); background: var(--cds-layer-01); border-left: var(--pih-accent-border-width) solid var(--cds-border-strong-01); }
+.big-state.ok { border-left-color: var(--cds-support-success); }
+.big-state.err { border-left-color: var(--cds-support-error); }
+.big-state b { font-size: var(--cds-heading-02-font-size); line-height: var(--cds-heading-02-line-height); font-weight: var(--pih-font-weight-semibold); display: flex; align-items: center; gap: var(--cds-spacing-03); }
+.kv { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 0; font-size: var(--cds-body-01-font-size); margin: 0; }
+.kv dt, .kv dd { padding: var(--cds-spacing-04) 0; border-bottom: var(--pih-border-width) solid var(--cds-border-subtle-01); }
+.kv dt { color: var(--cds-text-secondary); } .kv dd { margin: 0; text-align: right; overflow-wrap: anywhere; }
+.notif { margin: 0 var(--cds-spacing-03) var(--cds-spacing-03); padding: var(--cds-spacing-04) var(--cds-spacing-05); border-radius: var(--cds-spacing-05); background: var(--cds-layer-02); font-size: var(--cds-label-01-font-size); }
+.notif b { display: block; font-weight: var(--pih-font-weight-semibold); }
+
+/* ---- 決まったこと ---- */
+.decisions { border-top: var(--pih-focus-width) solid var(--cds-border-strong-01); padding-top: var(--cds-spacing-06); display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--cds-spacing-07); }
+.decisions h2 { font-size: var(--cds-heading-02-font-size); margin: 0 0 var(--cds-spacing-04); font-weight: var(--pih-font-weight-semibold); }
+.decisions ol, .decisions ul { margin: 0; padding-left: var(--cds-spacing-06); display: flex; flex-direction: column; gap: var(--cds-spacing-03); color: var(--cds-text-secondary); font-size: var(--cds-label-01-font-size); }
+.decisions li b { color: var(--cds-text-primary); }
+</style>
+</head>
+<body>
+
+<header class="mock-toolbar">
+  <h1 data-i18n="mock.title"></h1>
+  <span class="mock-note" data-i18n="mock.note"></span>
+  <div class="seg" id="lang-seg" aria-label="language">
+    <button data-lang="ja">日本語</button><button data-lang="en">English</button><button data-lang="zh-Hans">简体中文</button>
+  </div>
+  <div class="seg" id="theme-seg">
+    <button data-theme-btn="dark" data-i18n="mock.theme_dark"></button><button data-theme-btn="light" data-i18n="mock.theme_light"></button>
+  </div>
+</header>
+
+<main class="mock-main">
+
+<!-- ===================== S01 初回セットアップ ===================== -->
+<section data-screen="S01" class="screen">
+  <div class="screen-head"><span class="screen-id">S01</span><h2 class="screen-name" data-i18n="mock.screen.s01"></h2></div>
+  <p class="screen-desc" data-i18n="mock.screen.s01_desc"></p>
+  <div class="states">
+
+    <div class="state">
+      <span class="state-label"><b>S01a</b><span data-i18n="mock.state.s01a"></span></span>
+      <div class="win">
+        <div class="win-titlebar"><span class="glyph"></span><span data-i18n="app.name"></span><span class="spacer"></span><span class="ctl">–</span><span class="ctl">□</span><span class="ctl">×</span></div>
+        <div class="win-body"><div class="content">
+          <div class="steps">
+            <span class="step" data-state="current"><span class="n">1</span><span data-i18n="wizard.step.video"></span></span>
+            <span class="step"><span class="n">2</span><span data-i18n="wizard.step.phone"></span></span>
+            <span class="step"><span class="n">3</span><span data-i18n="wizard.step.vrchat"></span></span>
+            <span class="step"><span class="n">4</span><span data-i18n="wizard.step.calibrate"></span></span>
+          </div>
+          <h2 data-i18n="wizard.video.title"></h2>
+          <p data-i18n="wizard.video.desc"></p>
+          <div class="field"><span data-i18n="video.source_label"></span>
+            <div class="seg"><button aria-pressed="true" data-i18n="video.source.hdmi"></button><button aria-pressed="false" data-i18n="video.source.mirror"></button><button aria-pressed="false" data-i18n="video.source.window"></button></div>
+          </div>
+          <div class="two-col">
+            <div style="display:flex;flex-direction:column;gap:var(--cds-spacing-05)">
+              <label class="field"><span data-i18n="wizard.video.device_label"></span>
+                <select class="select"><option>USB3.0 HD Video Capture (MS2130)</option></select></label>
+              <label class="field"><span data-i18n="wizard.video.resolution_label"></span>
+                <select class="select"><option>1920×1080 ・ 60 fps</option></select></label>
+              <span class="switch" role="switch" aria-checked="true"><i></i><span data-i18n="wizard.video.crop_auto"></span></span>
+              <div class="banner info"><span class="dot info"></span><span data-i18n="wizard.video.mirror_hint"></span></div>
+            </div>
+            <div class="field"><span data-i18n="wizard.video.preview_label"></span>
+              <div class="preview"><div class="crop"></div></div>
+              <span class="muted" data-i18n="wizard.video.crop_hint"></span>
+            </div>
+          </div>
+          <div class="row end"><button class="btn btn-primary" data-i18n="common.next"></button></div>
+        </div></div>
+      </div>
+    </div>
+
+    <div class="state">
+      <span class="state-label"><b>S01b</b><span data-i18n="mock.state.s01b"></span></span>
+      <div class="win">
+        <div class="win-titlebar"><span class="glyph"></span><span data-i18n="app.name"></span><span class="spacer"></span><span class="ctl">–</span><span class="ctl">□</span><span class="ctl">×</span></div>
+        <div class="win-body"><div class="content">
+          <div class="steps">
+            <span class="step" data-state="current"><span class="n">1</span><span data-i18n="wizard.step.video"></span></span>
+            <span class="step"><span class="n">2</span><span data-i18n="wizard.step.phone"></span></span>
+            <span class="step"><span class="n">3</span><span data-i18n="wizard.step.vrchat"></span></span>
+            <span class="step"><span class="n">4</span><span data-i18n="wizard.step.calibrate"></span></span>
+          </div>
+          <h2 data-i18n="wizard.video.title"></h2>
+          <div class="banner err"><span class="dot err"></span><div><b data-i18n="wizard.video.not_found_title"></b><br><span data-i18n="wizard.video.not_found_desc"></span></div></div>
+          <div class="two-col">
+            <label class="field"><span data-i18n="wizard.video.device_label"></span>
+              <select class="select is-disabled" disabled><option data-i18n="wizard.video.no_device"></option></select></label>
+            <div class="field"><span data-i18n="wizard.video.preview_label"></span><div class="preview empty" data-i18n="wizard.video.no_signal"></div></div>
+          </div>
+          <div class="row end"><button class="btn" data-i18n="common.retry"></button><button class="btn btn-primary" disabled data-i18n="common.next"></button></div>
+        </div></div>
+      </div>
+    </div>
+
+    <div class="state">
+      <span class="state-label"><b>S01c</b><span data-i18n="mock.state.s01c"></span></span>
+      <div class="win">
+        <div class="win-titlebar"><span class="glyph"></span><span data-i18n="app.name"></span><span class="spacer"></span><span class="ctl">–</span><span class="ctl">□</span><span class="ctl">×</span></div>
+        <div class="win-body"><div class="content">
+          <div class="steps">
+            <span class="step" data-state="done"><span class="n">1</span><span data-i18n="wizard.step.video"></span></span>
+            <span class="step" data-state="current"><span class="n">2</span><span data-i18n="wizard.step.phone"></span></span>
+            <span class="step"><span class="n">3</span><span data-i18n="wizard.step.vrchat"></span></span>
+            <span class="step"><span class="n">4</span><span data-i18n="wizard.step.calibrate"></span></span>
+          </div>
+          <h2 data-i18n="wizard.phone.title"></h2>
+          <p data-i18n="wizard.phone.desc"></p>
+          <div class="two-col">
+            <div class="card">
+              <h3 data-i18n="wizard.phone.sensor_title"></h3>
+              <div class="row loose" style="align-items:flex-start">
+                <div class="qr"></div>
+                <div style="display:flex;flex-direction:column;gap:var(--cds-spacing-03);min-width:0;flex:1">
+                  <span class="muted" data-i18n="wizard.phone.qr_hint"></span>
+                  <span class="mono muted">192.168.10.24 : 9100</span>
+                  <div class="row loose"><span class="spinner"></span><span class="muted" data-i18n="wizard.phone.waiting"></span></div>
+                </div>
+              </div>
+              <div class="row loose"><button class="btn" data-i18n="wizard.phone.install_via_adb"></button></div>
+              <span class="muted" data-i18n="wizard.phone.install_note"></span>
+            </div>
+            <div class="card">
+              <h3 data-i18n="wizard.phone.adb_title"></h3>
+              <span class="muted" data-i18n="wizard.phone.adb_desc"></span>
+              <div class="row">
+                <input class="input mono" style="flex:1" placeholder="192.168.10.31:37145">
+                <input class="input mono" style="width:calc(var(--cds-spacing-09) * 2)" placeholder="000000">
+              </div>
+              <div class="row loose"><button class="btn" data-i18n="wizard.phone.adb_pair"></button><button class="btn btn-ghost" data-i18n="wizard.phone.adb_skip"></button></div>
+              <span class="muted" data-i18n="wizard.phone.ios_note"></span>
+              <button class="btn" data-i18n="wizard.phone.use_iphone"></button>
+            </div>
+          </div>
+          <div class="row end"><button class="btn" data-i18n="common.back"></button><button class="btn btn-primary" disabled data-i18n="common.next"></button></div>
+        </div></div>
+      </div>
+    </div>
+
+    <div class="state">
+      <span class="state-label"><b>S01d</b><span data-i18n="mock.state.s01d"></span></span>
+      <div class="win">
+        <div class="win-titlebar"><span class="glyph"></span><span data-i18n="app.name"></span><span class="spacer"></span><span class="ctl">–</span><span class="ctl">□</span><span class="ctl">×</span></div>
+        <div class="win-body"><div class="content">
+          <div class="steps">
+            <span class="step" data-state="done"><span class="n">1</span><span data-i18n="wizard.step.video"></span></span>
+            <span class="step" data-state="done"><span class="n">2</span><span data-i18n="wizard.step.phone"></span></span>
+            <span class="step" data-state="current"><span class="n">3</span><span data-i18n="wizard.step.vrchat"></span></span>
+            <span class="step"><span class="n">4</span><span data-i18n="wizard.step.calibrate"></span></span>
+          </div>
+          <h2 data-i18n="wizard.vrchat.title"></h2>
+          <p data-i18n="wizard.vrchat.desc"></p>
+          <div class="card">
+            <div class="status-list">
+              <div class="status-row"><span class="dot ok"></span><span><span class="name" data-i18n="wizard.vrchat.check_osc"></span></span><span class="state-text" data-i18n="state.connected"></span></div>
+              <div class="status-row"><span class="spinner"></span><span><span class="name" data-i18n="wizard.vrchat.check_avatar"></span><span class="detail" data-i18n="wizard.vrchat.check_avatar_detail"></span></span><span class="state-text" data-i18n="state.waiting"></span></div>
+            </div>
+          </div>
+          <div class="row loose"><a class="link" href="#" data-i18n="wizard.vrchat.guide_link"></a></div>
+          <div class="row end"><button class="btn" data-i18n="common.back"></button><button class="btn btn-ghost" data-i18n="wizard.vrchat.skip"></button><button class="btn btn-primary" disabled data-i18n="common.next"></button></div>
+        </div></div>
+      </div>
+    </div>
+
+    <div class="state">
+      <span class="state-label"><b>S01e</b><span data-i18n="mock.state.s01e"></span></span>
+      <div class="win">
+        <div class="win-titlebar"><span class="glyph"></span><span data-i18n="app.name"></span><span class="spacer"></span><span class="ctl">–</span><span class="ctl">□</span><span class="ctl">×</span></div>
+        <div class="win-body"><div class="content">
+          <div class="steps">
+            <span class="step" data-state="done"><span class="n">1</span><span data-i18n="wizard.step.video"></span></span>
+            <span class="step" data-state="done"><span class="n">2</span><span data-i18n="wizard.step.phone"></span></span>
+            <span class="step" data-state="done"><span class="n">3</span><span data-i18n="wizard.step.vrchat"></span></span>
+            <span class="step" data-state="current"><span class="n">4</span><span data-i18n="wizard.step.calibrate"></span></span>
+          </div>
+          <h2 data-i18n="wizard.calibrate.title"></h2>
+          <p data-i18n="wizard.calibrate.desc"></p>
+          <div class="field"><span data-i18n="wizard.calibrate.source_label"></span>
+            <div class="seg"><button aria-pressed="true" data-i18n="pose.source.controller"></button><button aria-pressed="false" data-i18n="pose.source.hand"></button></div>
+          </div>
+          <div class="field"><span data-i18n="wizard.calibrate.side_label"></span>
+            <div class="seg" style="align-self:flex-start"><button aria-pressed="false" data-i18n="side.left"></button><button aria-pressed="true" data-i18n="side.right"></button></div>
+          </div>
+          <div class="card">
+            <div class="row loose"><span class="spinner"></span><span data-i18n="wizard.calibrate.in_progress"></span></div>
+            <span class="muted" data-i18n="wizard.calibrate.vr_hint"></span>
+          </div>
+          <div class="row end"><button class="btn" data-i18n="common.back"></button><button class="btn btn-primary" data-i18n="wizard.calibrate.start"></button></div>
+        </div></div>
+      </div>
+    </div>
+
+    <div class="state">
+      <span class="state-label"><b>S01f</b><span data-i18n="mock.state.s01f"></span></span>
+      <div class="win">
+        <div class="win-titlebar"><span class="glyph"></span><span data-i18n="app.name"></span><span class="spacer"></span><span class="ctl">–</span><span class="ctl">□</span><span class="ctl">×</span></div>
+        <div class="win-body"><div class="content">
+          <div class="steps">
+            <span class="step" data-state="current"><span class="n">1</span><span data-i18n="wizard.step.video"></span></span>
+            <span class="step"><span class="n">2</span><span data-i18n="wizard.step.phone"></span></span>
+            <span class="step"><span class="n">3</span><span data-i18n="wizard.step.vrchat"></span></span>
+            <span class="step"><span class="n">4</span><span data-i18n="wizard.step.calibrate"></span></span>
+          </div>
+          <h2 data-i18n="wizard.video.title"></h2>
+          <p data-i18n="wizard.mirror.desc"></p>
+          <div class="field"><span data-i18n="video.source_label"></span>
+            <div class="seg"><button aria-pressed="false" data-i18n="video.source.hdmi"></button><button aria-pressed="true" data-i18n="video.source.mirror"></button><button aria-pressed="false" data-i18n="video.source.window"></button></div>
+          </div>
+          <div class="two-col">
+            <div style="display:flex;flex-direction:column;gap:var(--cds-spacing-05)">
+              <div class="field"><span data-i18n="wizard.mirror.connection_label"></span>
+                <div class="seg"><button aria-pressed="true" data-i18n="wizard.mirror.conn_usb"></button><button aria-pressed="false" data-i18n="wizard.mirror.conn_wifi"></button></div>
+              </div>
+              <label class="field"><span data-i18n="wizard.mirror.codec_label"></span>
+                <select class="select"><option data-i18n="wizard.mirror.codec_auto"></option></select></label>
+              <div class="banner info"><span class="dot info"></span><span data-i18n="wizard.mirror.hint_usb"></span></div>
+            </div>
+            <div class="field"><span data-i18n="wizard.video.preview_label"></span>
+              <div class="preview"><div class="phone-preview"><div class="fake-screen"><div class="bar"></div><div class="line m"></div><div class="line"></div><div class="line s"></div><div class="block"></div></div></div></div>
+              <span class="muted" data-i18n="wizard.mirror.secure_note"></span>
+            </div>
+          </div>
+          <div class="row end"><button class="btn btn-primary" data-i18n="common.next"></button></div>
+        </div></div>
+      </div>
+    </div>
+
+    <div class="state">
+      <span class="state-label"><b>S01g</b><span data-i18n="mock.state.s01g"></span></span>
+      <div class="win">
+        <div class="win-titlebar"><span class="glyph"></span><span data-i18n="app.name"></span><span class="spacer"></span><span class="ctl">–</span><span class="ctl">□</span><span class="ctl">×</span></div>
+        <div class="win-body"><div class="content">
+          <div class="steps">
+            <span class="step" data-state="current"><span class="n">1</span><span data-i18n="wizard.step.video"></span></span>
+            <span class="step"><span class="n">2</span><span data-i18n="wizard.step.phone"></span></span>
+            <span class="step"><span class="n">3</span><span data-i18n="wizard.step.vrchat"></span></span>
+            <span class="step"><span class="n">4</span><span data-i18n="wizard.step.calibrate"></span></span>
+          </div>
+          <h2 data-i18n="wizard.video.title"></h2>
+          <p data-i18n="wizard.window.desc"></p>
+          <div class="field"><span data-i18n="video.source_label"></span>
+            <div class="seg"><button aria-pressed="false" data-i18n="video.source.hdmi"></button><button aria-pressed="false" data-i18n="video.source.mirror"></button><button aria-pressed="true" data-i18n="video.source.window"></button></div>
+          </div>
+          <div class="two-col">
+            <div style="display:flex;flex-direction:column;gap:var(--cds-spacing-05)">
+              <label class="field"><span data-i18n="wizard.window.list_label"></span>
+                <select class="select"><option>AirPlay Receiver — iPhone 16</option></select></label>
+              <span class="switch" role="switch" aria-checked="true"><i></i><span data-i18n="wizard.video.crop_auto"></span></span>
+              <div class="banner info"><span class="dot info"></span><span data-i18n="wizard.window.hint"></span></div>
+            </div>
+            <div class="field"><span data-i18n="wizard.video.preview_label"></span>
+              <div class="preview"><div class="crop"></div></div>
+              <span class="muted" data-i18n="wizard.video.crop_hint"></span>
+            </div>
+          </div>
+          <div class="row end"><button class="btn btn-primary" data-i18n="common.next"></button></div>
+        </div></div>
+      </div>
+    </div>
+
+    <div class="state">
+      <span class="state-label"><b>S01h</b><span data-i18n="mock.state.s01h"></span></span>
+      <div class="win">
+        <div class="win-titlebar"><span class="glyph"></span><span data-i18n="app.name"></span><span class="spacer"></span><span class="ctl">–</span><span class="ctl">□</span><span class="ctl">×</span></div>
+        <div class="win-body"><div class="content">
+          <div class="steps">
+            <span class="step" data-state="done"><span class="n">1</span><span data-i18n="wizard.step.video"></span></span>
+            <span class="step" data-state="current"><span class="n">2</span><span data-i18n="wizard.step.phone"></span></span>
+            <span class="step"><span class="n">3</span><span data-i18n="wizard.step.vrchat"></span></span>
+            <span class="step"><span class="n">4</span><span data-i18n="wizard.step.calibrate"></span></span>
+          </div>
+          <h2 data-i18n="unlock.title"></h2>
+          <p data-i18n="unlock.desc"></p>
+          <div class="two-col">
+            <div class="card">
+              <h3 data-i18n="unlock.android_title"></h3>
+              <ul style="list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:var(--cds-spacing-03);font-size:var(--cds-label-01-font-size);line-height:var(--cds-label-01-line-height)">
+                <li style="display:flex;gap:var(--cds-spacing-03);align-items:flex-start"><span class="dot ok" style="margin-top:var(--cds-spacing-03)"></span><span data-i18n="unlock.android_fingerprint"></span></li>
+                <li style="display:flex;gap:var(--cds-spacing-03);align-items:flex-start"><span class="dot info" style="margin-top:var(--cds-spacing-03)"></span><span data-i18n="unlock.android_extend"></span></li>
+                <li style="display:flex;gap:var(--cds-spacing-03);align-items:flex-start"><span class="dot ok" style="margin-top:var(--cds-spacing-03)"></span><span data-i18n="unlock.android_stay_awake"></span></li>
+              </ul>
+            </div>
+            <div class="card">
+              <h3 data-i18n="unlock.ios_title"></h3>
+              <ul style="list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:var(--cds-spacing-03);font-size:var(--cds-label-01-font-size);line-height:var(--cds-label-01-line-height)">
+                <li style="display:flex;gap:var(--cds-spacing-03);align-items:flex-start"><span class="dot err" style="margin-top:var(--cds-spacing-03)"></span><span data-i18n="unlock.ios_faceid"></span></li>
+                <li style="display:flex;gap:var(--cds-spacing-03);align-items:flex-start"><span class="dot warn" style="margin-top:var(--cds-spacing-03)"></span><span data-i18n="unlock.ios_watch"></span></li>
+                <li style="display:flex;gap:var(--cds-spacing-03);align-items:flex-start"><span class="dot info" style="margin-top:var(--cds-spacing-03)"></span><span data-i18n="unlock.ios_autolock"></span></li>
+              </ul>
+            </div>
+          </div>
+          <div class="banner warn"><span class="dot warn"></span><span data-i18n="unlock.power_warn"></span></div>
+          <div class="row end"><button class="btn" data-i18n="common.back"></button><button class="btn btn-primary" data-i18n="common.next"></button></div>
+        </div></div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+</main>
+
+<script>
+const dict = {
+  "ja": {
+    "unlock.power_warn": "画面を消さない設定は電力を多く使います。給電しながら使ってください。",
+    "unlock.ios_autolock": "使う前に、「設定」→「画面表示と明るさ」→「自動ロック」を「なし」にしておくと、途中でロックされません。終わったら元に戻してください。",
+    "unlock.ios_watch": "「Apple Watchでロック解除」は、マスクやサングラス、ゴーグルで顔が覆われたときの機能です。ヘッドセットで動くかは環境によって異なります。",
+    "unlock.ios_faceid": "Face IDは、ヘッドセットで顔が隠れるため使えません。",
+    "unlock.ios_title": "iPhone",
+    "unlock.android_stay_awake": "VRChatとつながっている間は、このアプリがスマホの画面を消さないようにします（ワイヤレスデバッグが必要）。",
+    "unlock.android_extend": "「Extend Unlock」（旧Smart Lock）の「信頼できる場所」や「信頼できるデバイス」を使うと、条件を満たす間はロックされません（最大4時間）。",
+    "unlock.android_fingerprint": "指紋認証やPINは、ヘッドセットをかぶったまま使えます。",
+    "unlock.android_title": "Android",
+    "unlock.desc": "ヘッドセットをかぶると顔が隠れるため、顔認証ではロックを解除できません。VRの中でロック解除に困らないよう、使う前に次の設定を見直してください。",
+    "unlock.title": "ロック解除の準備",
+    "mock.state.s01h": "ロック解除の準備（スマホの手順の続き）",
+    "mock.state.s01g": "映像：ウィンドウを取り込む",
+    "mock.state.s01f": "映像：Androidのミラーリング",
+    "wizard.window.hint": "AirPlay受信ソフトはこのアプリに含まれません。お好みのものを別に入れてください。",
+    "wizard.window.list_label": "取り込むウィンドウ",
+    "wizard.window.desc": "PCに表示されているウィンドウを映像として使います。iPhoneは、AirPlay受信ソフトのウィンドウと組み合わせて使えます。",
+    "wizard.mirror.secure_note": "画面の取り込みを禁止しているアプリは、黒く表示されます。",
+    "wizard.mirror.hint_usb": "USBでつなぐと、遅延が小さく、充電もできます。スマホで「USBデバッグ」を許可してください。Wi-Fiの場合は、次の手順でワイヤレスデバッグのペア設定をすると映像が出ます。",
+    "wizard.mirror.codec_auto": "自動（H.265を優先）",
+    "wizard.mirror.codec_label": "映像の形式",
+    "wizard.mirror.conn_wifi": "Wi-Fi",
+    "wizard.mirror.conn_usb": "USBケーブル",
+    "wizard.mirror.connection_label": "つなぎ方",
+    "wizard.mirror.desc": "ワイヤレスデバッグまたはUSBで、Androidの画面を受け取ります。キャプチャ機器は要りません。",
+    "video.source.window": "ウィンドウを取り込む",
+    "video.source.mirror": "Androidのミラーリング",
+    "video.source.hdmi": "HDMIキャプチャ",
+    "video.source_label": "映像の取り込み方法",
+    "wizard.phone.install_note": "ペア設定のあとで使えます。入れたアプリは、このPCとの接続情報を自動で受け取ります。",
+    "wizard.phone.install_via_adb": "ワイヤレスデバッグでアプリを入れる",
+    "side.right": "右",
+    "side.left": "左",
+    "wizard.calibrate.side_label": "スマホを付ける側",
+    "pose.source.hand": "ハンドトラッキング（試験的）",
+    "pose.source.controller": "コントローラーに固定",
+    "wizard.calibrate.source_label": "位置の基準",
+    "wizard.phone.use_iphone": "iPhoneを使う（アプリなし）",
+    "mock.title": "phone_in_hand モック",
+    "mock.note": "見た目だけで、中身はない。クリックしても動作しません。",
+    "mock.theme_dark": "ダーク",
+    "mock.theme_light": "ライト",
+    "mock.screen.s01": "初回セットアップ",
+    "mock.screen.s01_desc": "PCアプリを初めて起動したときのウィザード。映像→スマホ→VRChat→位置合わせの順に進む。映像の取り込み方法はS01a（HDMI）、S01f（ミラーリング）、S01g（ウィンドウ）から選ぶ。",
+    "mock.state.s01a": "映像入力の選択",
+    "mock.state.s01b": "エラー：キャプチャデバイスが見つからない",
+    "mock.state.s01c": "スマホとの接続（読み込み中）",
+    "mock.state.s01d": "VRChatとの接続",
+    "mock.state.s01e": "位置合わせ",
+    "app.name": "Phone in Hand",
+    "common.next": "次へ",
+    "common.back": "戻る",
+    "common.retry": "再試行",
+    "wizard.step.video": "映像",
+    "wizard.step.phone": "スマホ",
+    "wizard.step.vrchat": "VRChat",
+    "wizard.step.calibrate": "位置合わせ",
+    "wizard.video.title": "映像入力を選ぶ",
+    "wizard.video.desc": "スマホのHDMI出力をつないだキャプチャデバイスを選んでください。",
+    "wizard.video.device_label": "キャプチャデバイス",
+    "wizard.video.resolution_label": "解像度とフレームレート",
+    "wizard.video.crop_auto": "黒い余白を自動で切り抜く",
+    "wizard.video.mirror_hint": "スマホ側の出力は「画面ミラーリング」にしてください。デスクトップモードが起動した場合は、スマホの設定でミラーリングに切り替えてください。",
+    "wizard.video.preview_label": "プレビュー",
+    "wizard.video.crop_hint": "点線の内側がVRに表示されます。",
+    "wizard.video.not_found_title": "キャプチャデバイスが見つかりません",
+    "wizard.video.not_found_desc": "USBの接続を確かめてから、再試行してください。ほかのアプリが使用中の場合も見つからないことがあります。",
+    "wizard.video.no_device": "デバイスがありません",
+    "wizard.video.no_signal": "映像がありません",
+    "wizard.phone.title": "スマホとつなぐ",
+    "wizard.phone.desc": "ワイヤレスデバッグでスマホとつなぎます。ハンドトラッキングを使う場合だけ、センサー送信アプリも入れてQRコードを読み取ります。PCとスマホは同じWi-Fiにつないでください。",
+    "wizard.phone.sensor_title": "センサー送信アプリ（ハンドトラッキング用）",
+    "wizard.phone.qr_hint": "アプリの「QRコードを読み取る」から読み取ります。",
+    "wizard.phone.waiting": "スマホからの接続を待っています…",
+    "wizard.phone.adb_title": "ワイヤレスデバッグ（Androidのみ）",
+    "wizard.phone.adb_desc": "「タップを表示」を自動でオンにするために使います。開発者向けオプションの「ワイヤレスデバッグ」→「ペア設定コードによるデバイスのペア設定」に出るIPアドレスとコードを入力してください。",
+    "wizard.phone.adb_pair": "ペア設定",
+    "wizard.phone.adb_skip": "あとで設定する",
+    "wizard.phone.ios_note": "iPhoneの場合は、この手順を使わずに下のボタンで進めます。",
+    "wizard.vrchat.title": "VRChatとつなぐ",
+    "wizard.vrchat.desc": "VRChatのアクションメニューでOSCを有効にし、スマホのモデルを組み込んだアバターに着替えてください。",
+    "wizard.vrchat.check_osc": "OSCの受信",
+    "wizard.vrchat.check_avatar": "アバターのパラメータ",
+    "wizard.vrchat.check_avatar_detail": "PhoneInHand/Visible が見つかるのを待っています",
+    "wizard.vrchat.guide_link": "アバターへの組み込み方",
+    "wizard.vrchat.skip": "あとで設定する",
+    "wizard.calibrate.title": "位置を合わせる",
+    "wizard.calibrate.desc": "スマホをホルダーでコントローラーに付けて、ヘッドセットをかぶってください。VRの中で、画面の見本がスマホに重なるように合わせ、トリガーで決定します。",
+    "wizard.calibrate.in_progress": "VRの中で位置合わせをしています",
+    "wizard.calibrate.vr_hint": "ヘッドセットをかぶって続けてください。終わるとこの画面は自動で進みます。",
+    "wizard.calibrate.start": "位置合わせを始める",
+    "state.connected": "接続中",
+    "state.waiting": "待機中"
+  },
+  "en": {
+    "unlock.power_warn": "Keeping the screen on uses more power. Keep your phone charging while you use it.",
+    "unlock.ios_autolock": "Before you start, set Settings > Display & Brightness > Auto-Lock to \"Never\" so your phone doesn't lock midway. Change it back afterward.",
+    "unlock.ios_watch": "\"Unlock with Apple Watch\" is designed for faces covered by a mask, sunglasses, or goggles. Whether it works with a headset depends on your setup.",
+    "unlock.ios_faceid": "Face ID can't be used because your headset covers your face.",
+    "unlock.ios_title": "iPhone",
+    "unlock.android_stay_awake": "While connected to VRChat, this app keeps your phone screen on (requires wireless debugging).",
+    "unlock.android_extend": "With Extend Unlock (formerly Smart Lock), \"Trusted places\" or \"Trusted devices\" keep your phone unlocked while the conditions are met (up to 4 hours).",
+    "unlock.android_fingerprint": "Fingerprint and PIN work while you wear your headset.",
+    "unlock.android_title": "Android",
+    "unlock.desc": "Your headset covers your face, so face recognition can't unlock your phone. Review these settings before you start so unlocking in VR isn't a problem.",
+    "unlock.title": "Prepare to unlock",
+    "mock.state.s01h": "Unlock preparation (continues the phone step)",
+    "mock.state.s01g": "Video: capture a window",
+    "mock.state.s01f": "Video: Android mirroring",
+    "wizard.window.hint": "This app doesn't include an AirPlay receiver. Install one you like separately.",
+    "wizard.window.list_label": "Window to capture",
+    "wizard.window.desc": "Use a window on your PC as the video. With an iPhone, combine it with an AirPlay receiver app's window.",
+    "wizard.mirror.secure_note": "Apps that block screen capture appear black.",
+    "wizard.mirror.hint_usb": "USB gives lower latency and charges your phone. Allow \"USB debugging\" on your phone. For Wi-Fi, video appears after you pair wireless debugging in the next step.",
+    "wizard.mirror.codec_auto": "Automatic (prefer H.265)",
+    "wizard.mirror.codec_label": "Video format",
+    "wizard.mirror.conn_wifi": "Wi-Fi",
+    "wizard.mirror.conn_usb": "USB cable",
+    "wizard.mirror.connection_label": "Connection",
+    "wizard.mirror.desc": "Receive your Android screen over wireless debugging or USB. No capture device needed.",
+    "video.source.window": "Capture a window",
+    "video.source.mirror": "Android mirroring",
+    "video.source.hdmi": "HDMI capture",
+    "video.source_label": "Video source",
+    "wizard.phone.install_note": "Available after pairing. The installed app receives the connection details for this PC automatically.",
+    "wizard.phone.install_via_adb": "Install the app via wireless debugging",
+    "side.right": "Right",
+    "side.left": "Left",
+    "wizard.calibrate.side_label": "Side the phone is on",
+    "pose.source.hand": "Hand tracking (experimental)",
+    "pose.source.controller": "Attached to controller",
+    "wizard.calibrate.source_label": "Position source",
+    "wizard.phone.use_iphone": "Use an iPhone (no app)",
+    "mock.title": "phone_in_hand mock",
+    "mock.note": "Visual only — nothing works. Clicking does nothing.",
+    "mock.theme_dark": "Dark",
+    "mock.theme_light": "Light",
+    "mock.screen.s01": "First-time setup",
+    "mock.screen.s01_desc": "Wizard shown on first launch of the PC app: video → phone → VRChat → calibration.",
+    "mock.state.s01a": "Choose video input",
+    "mock.state.s01b": "Error: no capture device",
+    "mock.state.s01c": "Connect phone (loading)",
+    "mock.state.s01d": "Connect VRChat",
+    "mock.state.s01e": "Calibration",
+    "app.name": "Phone in Hand",
+    "common.next": "Next",
+    "common.back": "Back",
+    "common.retry": "Retry",
+    "wizard.step.video": "Video",
+    "wizard.step.phone": "Phone",
+    "wizard.step.vrchat": "VRChat",
+    "wizard.step.calibrate": "Calibrate",
+    "wizard.video.title": "Choose video input",
+    "wizard.video.desc": "Select the capture device connected to your phone's HDMI output.",
+    "wizard.video.device_label": "Capture device",
+    "wizard.video.resolution_label": "Resolution and frame rate",
+    "wizard.video.crop_auto": "Crop black borders automatically",
+    "wizard.video.mirror_hint": "Set your phone's output to screen mirroring. If a desktop mode starts, switch to mirroring in your phone's settings.",
+    "wizard.video.preview_label": "Preview",
+    "wizard.video.crop_hint": "The area inside the dashed line is shown in VR.",
+    "wizard.video.not_found_title": "No capture device found",
+    "wizard.video.not_found_desc": "Check the USB connection and try again. The device may also be hidden if another app is using it.",
+    "wizard.video.no_device": "No devices",
+    "wizard.video.no_signal": "No video",
+    "wizard.phone.title": "Connect your phone",
+    "wizard.phone.desc": "Connect to your phone with wireless debugging. Only if you use hand tracking, also install the sensor app and scan the QR code. Your PC and phone must be on the same Wi-Fi.",
+    "wizard.phone.sensor_title": "Sensor app (for hand tracking)",
+    "wizard.phone.qr_hint": "Scan it from \"Scan QR code\" in the app.",
+    "wizard.phone.waiting": "Waiting for your phone to connect…",
+    "wizard.phone.adb_title": "Wireless debugging (Android only)",
+    "wizard.phone.adb_desc": "Used to turn on \"Show taps\" automatically. In Developer options, open Wireless debugging → Pair device with pairing code, then enter the IP address and code shown.",
+    "wizard.phone.adb_pair": "Pair",
+    "wizard.phone.adb_skip": "Set up later",
+    "wizard.phone.ios_note": "With an iPhone, skip this step and continue with the button below.",
+    "wizard.vrchat.title": "Connect VRChat",
+    "wizard.vrchat.desc": "Enable OSC in VRChat's Action Menu and switch to an avatar that includes the phone model.",
+    "wizard.vrchat.check_osc": "OSC input",
+    "wizard.vrchat.check_avatar": "Avatar parameters",
+    "wizard.vrchat.check_avatar_detail": "Waiting to find PhoneInHand/Visible",
+    "wizard.vrchat.guide_link": "How to add it to your avatar",
+    "wizard.vrchat.skip": "Set up later",
+    "wizard.calibrate.title": "Calibrate position",
+    "wizard.calibrate.desc": "Attach your phone to a controller with a holder and put on your headset. In VR, line up the screen guide with your phone and press the trigger to confirm.",
+    "wizard.calibrate.in_progress": "Calibrating in VR",
+    "wizard.calibrate.vr_hint": "Put on your headset to continue. This screen moves on automatically when done.",
+    "wizard.calibrate.start": "Start calibration",
+    "state.connected": "Connected",
+    "state.waiting": "Waiting"
+  },
+  "zh-Hans": {
+    "unlock.power_warn": "保持屏幕常亮会增加耗电。请边充电边使用。",
+    "unlock.ios_autolock": "使用前，将“设置”→“显示与亮度”→“自动锁定”设为“永不”，可避免中途锁定。使用后请改回原设置。",
+    "unlock.ios_watch": "“用Apple Watch解锁”是为戴口罩、墨镜或护目镜时设计的功能。戴头显时能否使用因使用环境而异。",
+    "unlock.ios_faceid": "头显会遮住脸部，因此无法使用面容ID。",
+    "unlock.ios_title": "iPhone",
+    "unlock.android_stay_awake": "与VRChat连接期间，本应用会让手机屏幕保持常亮（需要无线调试）。",
+    "unlock.android_extend": "使用“延长解锁”（原Smart Lock）的“可信地点”或“可信设备”，在满足条件时手机不会锁定（最长4小时）。",
+    "unlock.android_fingerprint": "戴着头显也可以使用指纹或PIN码解锁。",
+    "unlock.android_title": "Android",
+    "unlock.desc": "戴上头显后脸部会被遮住，无法用面部识别解锁。为了在VR中解锁不受影响，请在使用前检查以下设置。",
+    "unlock.title": "解锁准备",
+    "mock.state.s01h": "解锁准备（手机步骤的后续）",
+    "mock.state.s01g": "视频：采集窗口",
+    "mock.state.s01f": "视频：Android投屏",
+    "wizard.window.hint": "本应用不包含AirPlay接收软件，请另行安装你喜欢的软件。",
+    "wizard.window.list_label": "要采集的窗口",
+    "wizard.window.desc": "将电脑上显示的窗口用作视频。iPhone可以搭配AirPlay接收软件的窗口使用。",
+    "wizard.mirror.secure_note": "禁止屏幕采集的应用会显示为黑色。",
+    "wizard.mirror.hint_usb": "使用USB连接延迟更低，还能同时充电。请在手机上允许“USB调试”。使用Wi-Fi时，在下一步完成无线调试配对后即可显示画面。",
+    "wizard.mirror.codec_auto": "自动（优先H.265）",
+    "wizard.mirror.codec_label": "视频格式",
+    "wizard.mirror.conn_wifi": "Wi-Fi",
+    "wizard.mirror.conn_usb": "USB数据线",
+    "wizard.mirror.connection_label": "连接方式",
+    "wizard.mirror.desc": "通过无线调试或USB接收Android的屏幕画面。无需采集卡。",
+    "video.source.window": "采集窗口",
+    "video.source.mirror": "Android投屏",
+    "video.source.hdmi": "HDMI采集",
+    "video.source_label": "视频来源",
+    "wizard.phone.install_note": "配对后可用。安装的应用会自动获取与这台电脑的连接信息。",
+    "wizard.phone.install_via_adb": "通过无线调试安装应用",
+    "side.right": "右",
+    "side.left": "左",
+    "wizard.calibrate.side_label": "手机安装在哪一侧",
+    "pose.source.hand": "手部追踪（实验性）",
+    "pose.source.controller": "固定在控制器上",
+    "wizard.calibrate.source_label": "位置基准",
+    "wizard.phone.use_iphone": "使用iPhone（无需应用）",
+    "mock.title": "phone_in_hand 原型",
+    "mock.note": "仅展示外观，没有实际功能。点击不会有反应。",
+    "mock.theme_dark": "深色",
+    "mock.theme_light": "浅色",
+    "mock.screen.s01": "首次设置",
+    "mock.screen.s01_desc": "首次启动电脑端应用时的向导：视频 → 手机 → VRChat → 位置校准。",
+    "mock.state.s01a": "选择视频输入",
+    "mock.state.s01b": "错误：未找到采集卡",
+    "mock.state.s01c": "连接手机（加载中）",
+    "mock.state.s01d": "连接VRChat",
+    "mock.state.s01e": "位置校准",
+    "app.name": "Phone in Hand",
+    "common.next": "下一步",
+    "common.back": "返回",
+    "common.retry": "重试",
+    "wizard.step.video": "视频",
+    "wizard.step.phone": "手机",
+    "wizard.step.vrchat": "VRChat",
+    "wizard.step.calibrate": "位置校准",
+    "wizard.video.title": "选择视频输入",
+    "wizard.video.desc": "请选择连接了手机HDMI输出的采集卡。",
+    "wizard.video.device_label": "采集卡",
+    "wizard.video.resolution_label": "分辨率和帧率",
+    "wizard.video.crop_auto": "自动裁掉黑边",
+    "wizard.video.mirror_hint": "请将手机的输出设为“屏幕镜像”。如果启动了桌面模式，请在手机设置中切换为镜像。",
+    "wizard.video.preview_label": "预览",
+    "wizard.video.crop_hint": "虚线内的区域会显示在VR中。",
+    "wizard.video.not_found_title": "未找到采集卡",
+    "wizard.video.not_found_desc": "请检查USB连接后重试。如果其他应用正在使用，也可能无法找到。",
+    "wizard.video.no_device": "没有设备",
+    "wizard.video.no_signal": "没有视频信号",
+    "wizard.phone.title": "连接手机",
+    "wizard.phone.desc": "通过无线调试连接手机。仅在使用手部追踪时，还需安装传感器发送应用并扫描二维码。电脑和手机需连接同一Wi-Fi。",
+    "wizard.phone.sensor_title": "传感器发送应用（手部追踪用）",
+    "wizard.phone.qr_hint": "在应用中点击“扫描二维码”进行扫描。",
+    "wizard.phone.waiting": "正在等待手机连接…",
+    "wizard.phone.adb_title": "无线调试（仅限Android）",
+    "wizard.phone.adb_desc": "用于自动开启“显示点按操作”。请在开发者选项中打开“无线调试”→“使用配对码配对设备”，输入显示的IP地址和配对码。",
+    "wizard.phone.adb_pair": "配对",
+    "wizard.phone.adb_skip": "稍后设置",
+    "wizard.phone.ios_note": "使用iPhone时请跳过此步骤，点击下方按钮继续。",
+    "wizard.vrchat.title": "连接VRChat",
+    "wizard.vrchat.desc": "请在VRChat的动作菜单中启用OSC，并换上装有手机模型的虚拟形象。",
+    "wizard.vrchat.check_osc": "OSC接收",
+    "wizard.vrchat.check_avatar": "虚拟形象参数",
+    "wizard.vrchat.check_avatar_detail": "正在等待找到 PhoneInHand/Visible",
+    "wizard.vrchat.guide_link": "如何添加到虚拟形象",
+    "wizard.vrchat.skip": "稍后设置",
+    "wizard.calibrate.title": "校准位置",
+    "wizard.calibrate.desc": "请用支架把手机固定在控制器上，然后戴上头显。在VR中让画面示意与手机重合，按扳机键确认。",
+    "wizard.calibrate.in_progress": "正在VR中校准位置",
+    "wizard.calibrate.vr_hint": "请戴上头显继续。完成后此界面会自动进入下一步。",
+    "wizard.calibrate.start": "开始校准",
+    "state.connected": "已连接",
+    "state.waiting": "等待中"
+  }
+};
+
+let lang = "ja";
+function t(key) {
+  return (dict[lang] && dict[lang][key]) ?? dict.ja[key] ?? key;
+}
+function render() {
+  document.documentElement.lang = lang;
+  document.querySelectorAll("[data-i18n]").forEach(el => {
+    let s = t(el.dataset.i18n);
+    if (el.dataset.vars) {
+      const v = JSON.parse(el.dataset.vars);
+      s = s.replace(/\{(\w+)\}/g, (_, k) => v[k] ?? "");
+    }
+    el.textContent = s;
+  });
+  document.querySelectorAll("[data-i18n-label]").forEach(el => {
+    const s = t(el.dataset.i18nLabel);
+    el.setAttribute("aria-label", s);
+    el.setAttribute("title", s);
+  });
+  document.querySelectorAll("#lang-seg button").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.lang === lang)));
+  const theme = document.documentElement.dataset.theme;
+  document.querySelectorAll("#theme-seg button").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.themeBtn === theme)));
+}
+document.querySelectorAll("#lang-seg button").forEach(b => b.addEventListener("click", () => { lang = b.dataset.lang; render(); }));
+document.querySelectorAll("#theme-seg button").forEach(b => b.addEventListener("click", () => { document.documentElement.dataset.theme = b.dataset.themeBtn; render(); }));
+render();
+</script>
+</body>
+</html>

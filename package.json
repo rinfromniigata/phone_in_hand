@@ -1,0 +1,47 @@
+{
+	"name": "phone_in_hand",
+	"version": "0.0.0",
+	"private": true,
+	"type": "module",
+	"scripts": {
+		"fonts": "bun scripts/copy_fonts.ts",
+		"dev": "bun run fonts && vite dev",
+		"build": "bun run fonts && vite build",
+		"preview": "vite preview",
+		"tauri": "tauri",
+		"check": "bun scripts/check.ts",
+		"i18n:check": "bun scripts/check_i18n.ts",
+		"tokens:check": "bun scripts/check_tokens.ts"
+	},
+	"devDependencies": {
+		"@eslint/js": "^10.0.1",
+		"@ibm/plex-mono": "2.5.0",
+		"@ibm/plex-sans": "1.1.0",
+		"@ibm/plex-sans-jp": "3.0.0",
+		"@ibm/plex-sans-sc": "1.1.0",
+		"@inlang/paraglide-js": "~2.29.3",
+		"@sveltejs/adapter-static": "^4.0.1",
+		"@sveltejs/kit": "^3.2.0",
+		"@sveltejs/vite-plugin-svelte": "^7.3.1",
+		"@tauri-apps/cli": "^2.12.4",
+		"@types/bun": "^1.4.4",
+		"eslint": "^10.15.0",
+		"eslint-plugin-svelte": "^3.24.1",
+		"globals": "^17.14.0",
+		"svelte": "^5.57.3",
+		"svelte-check": "^4.7.8",
+		"typescript": "~6.0.3",
+		"typescript-eslint": "^8.72.2",
+		"vite": "^8.3.8"
+	},
+	"dependencies": {
+		"@tauri-apps/api": "^2.12.4",
+		"@tauri-apps/plugin-os": "^2.4.0",
+		"carbon-components-svelte": "^0.114.1",
+		"carbon-icons-svelte": "^13.18.0"
+	},
+	"imports": {
+		"#lib": "./src/lib/index.ts",
+		"#lib/*": "./src/lib/*"
+	}
+}

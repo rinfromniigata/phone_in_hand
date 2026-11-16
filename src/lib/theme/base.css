@@ -1,0 +1,19 @@
+/*
+ * アプリ全体の土台。値は tokens.css の変数だけを参照する。
+ */
+html,
+body {
+	margin: 0;
+	background: var(--cds-background);
+	color: var(--cds-text-primary);
+	font-family: var(--pih-font-family-sans);
+	font-size: var(--cds-body-01-font-size);
+	line-height: var(--cds-body-01-line-height);
+	letter-spacing: var(--cds-body-01-letter-spacing);
+}
+
+/* フォーカスリングを常に見えるようにする */
+:focus-visible {
+	outline: var(--pih-focus-width) solid var(--cds-focus);
+	outline-offset: calc(-1 * var(--pih-focus-width));
+}

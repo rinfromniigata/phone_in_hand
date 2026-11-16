@@ -1,0 +1,57 @@
+{
+  "schema_version": 1,
+  "setup_completed": false,
+  "phone_kind": "android",
+  "video": {
+    "source": "hdmi",
+    "hdmi": {
+      "device_id": null,
+      "width": null,
+      "height": null,
+      "fps": null
+    },
+    "mirror": {
+      "connection": "usb",
+      "codec": "auto",
+      "serial": null
+    },
+    "window": {
+      "title": null,
+      "executable": null
+    },
+    "crop": {
+      "mode": "auto",
+      "rect": null
+    }
+  },
+  "pose": {
+    "source": "controller",
+    "side": "right"
+  },
+  "display": {
+    "enabled": false,
+    "size_inch": 6.7,
+    "brightness": 0.8
+  },
+  "input": {
+    "show_touches": true,
+    "keep_awake": true
+  },
+  "vrchat": {
+    "send_port": 9000,
+    "receive_port": 9001,
+    "param_visible": "PhoneInHand/Visible",
+    "param_is_left": "PhoneInHand/IsLeft"
+  },
+  "general": {
+    "language": "auto",
+    "theme": "system",
+    "start_with_steamvr": false,
+    "start_minimized": false
+  },
+  "sensor": {
+    "token": null,
+    "port": 39570
+  },
+  "adb_devices": []
+}

@@ -1,0 +1,18 @@
+[package]
+name = "pih_core"
+description = "phone_in_hand のTauriに依存しないロジック（型、トレイト、判定、設定のモデル）"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+publish = false
+
+[dependencies]
+serde.workspace = true
+serde_json.workspace = true
+thiserror.workspace = true
+glam = { version = "0.34.3", features = ["serde"] }
+
+[dev-dependencies]
+tempfile = "3.27.0"

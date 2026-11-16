@@ -1,0 +1,21 @@
+roadmap/archived/
+
+# 依存とビルド成果物
+node_modules/
+/build/
+/.svelte-kit/
+/target/
+src-tauri/gen/schemas/
+
+# Paraglideの生成物
+/src/lib/paraglide/
+
+# エディタとOS
+.DS_Store
+Thumbs.db
+
+# 同梱する書体（scripts/copy_fonts.ts が node_modules からコピーする）
+/static/fonts/
+
+# 開発時だけの疑似ロケール（scripts/gen_pseudo_locale.ts が作る）
+/.pseudo/

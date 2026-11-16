@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024">
+  <!-- phone_in_hand アイコン マスター（1024×1024）
+       前景は中央の直径約62%の円（中心512,512・半径317）に収める。
+       色はトークンの値：背景 #161616（Gray 100）、手 #c6c6c6（Gray 30）、
+       スマホの枠 #f4f4f4（Gray 10）、画面 #0f62fe（Blue 60）。 -->
+  <g id="00_bg">
+    <rect x="0" y="0" width="1024" height="1024" fill="#161616"/>
+  </g>
+  <g id="01_palm" transform="translate(512 512) scale(0.88) translate(-519 -514)">
+    <path d="M330 600 C330 560 360 540 400 540 L640 540 C690 540 712 576 704 620 L680 744 C668 800 620 832 560 832 L460 832 C392 832 346 790 338 724 Z" fill="#c6c6c6"/>
+  </g>
+  <g id="02_phone" transform="translate(512 512) scale(0.88) translate(-519 -514)">
+    <path fill-rule="evenodd" fill="#f4f4f4" d="M436 196 L588 196 C624 196 648 220 648 256 L648 712 C648 748 624 772 588 772 L436 772 C400 772 376 748 376 712 L376 256 C376 220 400 196 436 196 Z M440 232 C420 232 408 244 408 264 L408 704 C408 724 420 736 440 736 L584 736 C604 736 616 724 616 704 L616 264 C616 244 604 232 584 232 Z"/>
+  </g>
+  <g id="03_screen" transform="translate(512 512) scale(0.88) translate(-519 -514)">
+    <rect x="408" y="232" width="208" height="504" rx="32" fill="#0f62fe"/>
+  </g>
+  <g id="04_thumb" transform="translate(512 512) scale(0.88) translate(-519 -514)">
+    <path d="M338 640 C326 612 342 586 370 584 L470 578 C498 576 516 596 512 622 C508 646 488 660 464 662 L376 670 C358 672 344 660 338 640 Z" fill="#c6c6c6"/>
+  </g>
+</svg>

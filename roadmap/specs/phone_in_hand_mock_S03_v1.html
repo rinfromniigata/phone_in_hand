@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html lang="ja" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>phone_in_hand モック S03 設定</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;600&family=IBM+Plex+Sans+JP:wght@400;600&family=IBM+Plex+Mono:wght@400&family=Noto+Sans+SC:wght@400;600&display=swap">
+<style>
+/*
+ * phone_in_hand トークン（IBM Carbon Design System v11 準拠）
+ * --cds-* は Carbon のトークン名と値（ダーク：g100、ライト：white）に合わせる。
+ * --pih-* はこのアプリ固有の値（寸法、書体の切り替え、VR内の見本の色）。
+ */
+:root {
+  /* ---- 色：g100（ダーク、既定） ---- */
+  --cds-background: #161616;
+  --cds-background-hover: rgba(141, 141, 141, 0.16);
+  --cds-layer-01: #262626;
+  --cds-layer-02: #393939;
+  --cds-layer-hover-01: #333333;
+  --cds-layer-selected-01: #393939;
+  --cds-field-01: #262626;
+  --cds-field-02: #393939;
+  --cds-border-subtle-01: #393939;
+  --cds-border-strong-01: #6f6f6f;
+  --cds-border-interactive: #4589ff;
+  --cds-border-disabled: rgba(141, 141, 141, 0.5);
+  --cds-text-primary: #f4f4f4;
+  --cds-text-secondary: #c6c6c6;
+  --cds-text-helper: #a8a8a8;
+  --cds-text-placeholder: rgba(244, 244, 244, 0.4);
+  --cds-text-disabled: rgba(244, 244, 244, 0.25);
+  --cds-text-on-color: #ffffff;
+  --cds-link-primary: #78a9ff;
+  --cds-link-primary-hover: #a6c8ff;
+  --cds-interactive: #4589ff;
+  --cds-button-primary: #0f62fe;
+  --cds-button-primary-hover: #0050e6;
+  --cds-button-secondary: #6f6f6f;
+  --cds-button-secondary-hover: #606060;
+  --cds-button-disabled: rgba(141, 141, 141, 0.3);
+  --cds-focus: #ffffff;
+  --cds-focus-inset: #161616;
+  --cds-support-success: #42be65;
+  --cds-support-warning: #f1c21b;
+  --cds-support-error: #fa4d56;
+  --cds-support-info: #4589ff;
+  --cds-toggle-off: #6f6f6f;
+  --cds-icon-on-color: #ffffff;
+  --cds-overlay: rgba(0, 0, 0, 0.65);
+
+  /* ---- 余白（Carbon spacing scale） ---- */
+  --cds-spacing-01: 2px;
+  --cds-spacing-02: 4px;
+  --cds-spacing-03: 8px;
+  --cds-spacing-04: 12px;
+  --cds-spacing-05: 16px;
+  --cds-spacing-06: 24px;
+  --cds-spacing-07: 32px;
+  --cds-spacing-08: 40px;
+  --cds-spacing-09: 48px;
+  --cds-spacing-10: 64px;
+
+  /* ---- タイポグラフィ（Carbon type tokens。書体はロケールごとに切り替える） ---- */
+  --pih-font-family-sans: "IBM Plex Sans", "Helvetica Neue", Arial, sans-serif;
+  --pih-font-family-mono: "IBM Plex Mono", "Menlo", "Consolas", monospace;
+  --cds-label-01-font-size: 12px;
+  --cds-label-01-line-height: 16px;
+  --cds-label-01-letter-spacing: 0.32px;
+  --cds-helper-text-01-font-size: 12px;
+  --cds-helper-text-01-line-height: 16px;
+  --cds-body-01-font-size: 14px;
+  --cds-body-01-line-height: 20px;
+  --cds-body-01-letter-spacing: 0.16px;
+  --cds-heading-compact-01-font-size: 14px;
+  --cds-heading-compact-01-line-height: 18px;
+  --cds-heading-02-font-size: 16px;
+  --cds-heading-02-line-height: 24px;
+  --cds-heading-03-font-size: 20px;
+  --cds-heading-03-line-height: 28px;
+  --cds-heading-04-font-size: 28px;
+  --cds-heading-04-line-height: 36px;
+  --pih-font-weight-regular: 400;
+  --pih-font-weight-semibold: 600;
+
+  /* ---- モーション（Carbon productive） ---- */
+  --cds-duration-fast-01: 70ms;
+  --cds-duration-fast-02: 110ms;
+  --cds-duration-moderate-01: 150ms;
+  --cds-duration-moderate-02: 240ms;
+  --cds-easing-productive-standard: cubic-bezier(0.2, 0, 0.38, 0.9);
+
+  /* ---- 形と線 ---- */
+  --pih-radius-none: 0;
+  --pih-radius-full: 999px;
+  --pih-radius-device: 28px;
+  --pih-border-width: 1px;
+  --pih-focus-width: 2px;
+  --pih-accent-border-width: 3px;
+
+  /* ---- 寸法 ---- */
+  --pih-control-height: 40px;
+  --pih-header-height: 48px;
+  --pih-titlebar-height: 32px;
+  --pih-rail-width: 48px;
+  --pih-icon-size: 20px;
+  --pih-toggle-width: 48px;
+  --pih-toggle-height: 24px;
+  --pih-toggle-knob: 18px;
+  --pih-status-dot: 8px;
+  --pih-desktop-window-width: 960px;
+  --pih-desktop-window-height: 680px;
+  --pih-phone-width: 360px;
+  --pih-phone-height: 740px;
+
+  /* ---- VR内の見本（イラストだけに使う） ---- */
+  --pih-vr-sky-top: #1c2533;
+  --pih-vr-sky-bottom: #0b0e12;
+  --pih-hand: #c9b8a6;
+}
+
+/* ---- 色：white（ライト） ---- */
+:root[data-theme="light"] {
+  --cds-background: #ffffff;
+  --cds-background-hover: rgba(141, 141, 141, 0.12);
+  --cds-layer-01: #f4f4f4;
+  --cds-layer-02: #ffffff;
+  --cds-layer-hover-01: #e8e8e8;
+  --cds-layer-selected-01: #e0e0e0;
+  --cds-field-01: #f4f4f4;
+  --cds-field-02: #ffffff;
+  --cds-border-subtle-01: #c6c6c6;
+  --cds-border-strong-01: #8d8d8d;
+  --cds-border-interactive: #0f62fe;
+  --cds-border-disabled: #c6c6c6;
+  --cds-text-primary: #161616;
+  --cds-text-secondary: #525252;
+  --cds-text-helper: #6f6f6f;
+  --cds-text-placeholder: rgba(22, 22, 22, 0.4);
+  --cds-text-disabled: rgba(22, 22, 22, 0.25);
+  --cds-text-on-color: #ffffff;
+  --cds-link-primary: #0f62fe;
+  --cds-link-primary-hover: #0043ce;
+  --cds-interactive: #0f62fe;
+  --cds-button-primary: #0f62fe;
+  --cds-button-primary-hover: #0050e6;
+  --cds-button-secondary: #393939;
+  --cds-button-secondary-hover: #474747;
+  --cds-button-disabled: #c6c6c6;
+  --cds-focus: #0f62fe;
+  --cds-focus-inset: #ffffff;
+  --cds-support-success: #24a148;
+  --cds-support-warning: #f1c21b;
+  --cds-support-error: #da1e28;
+  --cds-support-info: #0043ce;
+  --cds-toggle-off: #8d8d8d;
+  --cds-overlay: rgba(22, 22, 22, 0.5);
+}
+
+/* ---- 書体：ロケールごと（日本語と中国語は字形が異なるため分ける） ---- */
+:root:lang(ja) { --pih-font-family-sans: "IBM Plex Sans JP", "IBM Plex Sans", "Yu Gothic UI", sans-serif; }
+:root:lang(en) { --pih-font-family-sans: "IBM Plex Sans", "Helvetica Neue", Arial, sans-serif; }
+:root:lang(zh-Hans) { --pih-font-family-sans: "IBM Plex Sans SC", "Noto Sans SC", "IBM Plex Sans", "Microsoft YaHei UI", sans-serif; }
+
+
+/* ---- モック共通 ---- */
+* { box-sizing: border-box; }
+body {
+  margin: 0; background: var(--cds-background); color: var(--cds-text-primary);
+  font-family: var(--pih-font-family-sans); font-size: var(--cds-body-01-font-size);
+  line-height: var(--cds-body-01-line-height); letter-spacing: var(--cds-body-01-letter-spacing);
+}
+.mock-toolbar {
+  position: sticky; top: 0; z-index: 10; display: flex; flex-wrap: wrap; gap: var(--cds-spacing-05);
+  align-items: center; padding: var(--cds-spacing-03) var(--cds-spacing-06); min-height: var(--pih-header-height);
+  background: var(--cds-layer-01); border-bottom: var(--pih-border-width) solid var(--cds-border-subtle-01);
+}
+.mock-toolbar h1 { font-size: var(--cds-heading-compact-01-font-size); margin: 0; font-weight: var(--pih-font-weight-semibold); }
+.mock-note { color: var(--cds-text-secondary); font-size: var(--cds-label-01-font-size); flex: 1 1 240px; }
+.seg { display: inline-flex; align-self: flex-start; border: var(--pih-border-width) solid var(--cds-border-strong-01); }
+.seg button {
+  font: inherit; font-size: var(--cds-label-01-font-size); color: var(--cds-text-secondary); background: transparent;
+  border: 0; border-right: var(--pih-border-width) solid var(--cds-border-strong-01); padding: var(--cds-spacing-02) var(--cds-spacing-04); cursor: pointer;
+}
+.seg button:last-child { border-right: 0; }
+.seg button[aria-pressed="true"] { background: var(--cds-layer-selected-01); color: var(--cds-text-primary); }
+.mock-main { padding: var(--cds-spacing-07) var(--cds-spacing-06); display: flex; flex-direction: column; gap: var(--cds-spacing-09); }
+.screen { display: flex; flex-direction: column; gap: var(--cds-spacing-06); }
+.screen-head { display: flex; align-items: baseline; gap: var(--cds-spacing-04); border-bottom: var(--pih-border-width) solid var(--cds-border-subtle-01); padding-bottom: var(--cds-spacing-03); }
+.screen-id { font-family: var(--pih-font-family-mono); color: var(--cds-link-primary); }
+.screen-name { font-size: var(--cds-heading-03-font-size); line-height: var(--cds-heading-03-line-height); font-weight: var(--pih-font-weight-regular); margin: 0; }
+.screen-desc { color: var(--cds-text-secondary); font-size: var(--cds-label-01-font-size); margin: 0; }
+.states { display: flex; flex-wrap: wrap; gap: var(--cds-spacing-07); align-items: flex-start; }
+.state { display: flex; flex-direction: column; gap: var(--cds-spacing-03); }
+.state-label { font-size: var(--cds-label-01-font-size); color: var(--cds-text-secondary); }
+.state-label b { font-family: var(--pih-font-family-mono); color: var(--cds-link-primary); font-weight: var(--pih-font-weight-regular); margin-right: var(--cds-spacing-03); }
+
+/* ---- デスクトップウィンドウ（Carbon UI Shell 風） ---- */
+.win {
+  width: var(--pih-desktop-window-width); height: var(--pih-desktop-window-height);
+  background: var(--cds-background); border: var(--pih-border-width) solid var(--cds-border-strong-01);
+  overflow: hidden; display: flex; flex-direction: column;
+}
+.win-titlebar {
+  display: flex; align-items: center; gap: var(--cds-spacing-03); height: var(--pih-titlebar-height); flex: none;
+  padding-left: var(--cds-spacing-05); background: var(--cds-background); border-bottom: var(--pih-border-width) solid var(--cds-border-subtle-01);
+  font-size: var(--cds-label-01-font-size); color: var(--cds-text-secondary);
+}
+.win-titlebar .glyph { width: var(--cds-spacing-05); height: var(--cds-spacing-05); border: var(--pih-focus-width) solid var(--cds-text-primary); border-radius: var(--cds-spacing-02); }
+.win-titlebar .spacer { flex: 1; }
+.win-titlebar .ctl { width: var(--pih-header-height); text-align: center; color: var(--cds-text-helper); }
+.win-body { flex: 1; display: flex; min-height: 0; }
+.sidebar {
+  width: var(--pih-rail-width); flex: none; padding: 0;
+  background: var(--cds-background); border-right: var(--pih-border-width) solid var(--cds-border-subtle-01); display: flex; flex-direction: column;
+}
+.nav-item {
+  width: var(--pih-rail-width); height: var(--pih-rail-width); display: flex; align-items: center; justify-content: center;
+  color: var(--cds-text-secondary); cursor: pointer; border-left: var(--pih-accent-border-width) solid transparent;
+  border-right: var(--pih-accent-border-width) solid transparent; text-decoration: none;
+}
+.nav-item:hover { background: var(--cds-background-hover); color: var(--cds-text-primary); }
+.nav-item:focus-visible { outline: var(--pih-focus-width) solid var(--cds-focus); outline-offset: calc(var(--pih-focus-width) * -1); }
+.nav-item[aria-current="page"] { background: var(--cds-layer-selected-01); color: var(--cds-text-primary); border-left-color: var(--cds-border-interactive); }
+.nav-icon { width: var(--pih-icon-size); height: var(--pih-icon-size); }
+.content { flex: 1; padding: var(--cds-spacing-06); overflow: auto; display: flex; flex-direction: column; gap: var(--cds-spacing-05); min-width: 0; }
+.content h2 { margin: 0; font-size: var(--cds-heading-03-font-size); line-height: var(--cds-heading-03-line-height); font-weight: var(--pih-font-weight-regular); }
+.content p { margin: 0; color: var(--cds-text-secondary); }
+
+/* ---- 部品（Carbon） ---- */
+.btn {
+  font: inherit; font-size: var(--cds-body-01-font-size); height: var(--pih-control-height); min-width: calc(var(--cds-spacing-10) + var(--cds-spacing-07));
+  padding: 0 var(--cds-spacing-09) 0 var(--cds-spacing-05); text-align: left;
+  border: var(--pih-border-width) solid transparent; border-radius: var(--pih-radius-none);
+  background: var(--cds-button-secondary); color: var(--cds-text-on-color);
+  cursor: pointer; white-space: nowrap; transition: background var(--cds-duration-fast-02) var(--cds-easing-productive-standard);
+}
+.btn:hover, .btn.is-hover { background: var(--cds-button-secondary-hover); }
+.btn:focus-visible, .btn.is-focus { border-color: var(--cds-focus); box-shadow: inset 0 0 0 var(--pih-border-width) var(--cds-focus), inset 0 0 0 var(--pih-focus-width) var(--cds-focus-inset); outline: none; }
+.btn:disabled, .btn.is-disabled { background: var(--cds-button-disabled); color: var(--cds-text-disabled); cursor: not-allowed; }
+.btn-primary { background: var(--cds-button-primary); }
+.btn-primary:hover, .btn-primary.is-hover { background: var(--cds-button-primary-hover); }
+.btn-ghost { background: transparent; color: var(--cds-link-primary); padding: 0 var(--cds-spacing-05); min-width: 0; }
+.btn-ghost:hover, .btn-ghost.is-hover { background: var(--cds-background-hover); color: var(--cds-link-primary-hover); }
+.row { display: flex; gap: var(--cds-spacing-01); align-items: center; flex-wrap: wrap; }
+.row.loose { gap: var(--cds-spacing-04); }
+.row.end { justify-content: flex-end; margin-top: auto; }
+.field { display: flex; flex-direction: column; gap: var(--cds-spacing-03); }
+.field > span { font-size: var(--cds-label-01-font-size); line-height: var(--cds-label-01-line-height); letter-spacing: var(--cds-label-01-letter-spacing); color: var(--cds-text-secondary); }
+.select, .input {
+  font: inherit; height: var(--pih-control-height); padding: 0 var(--cds-spacing-05); border-radius: var(--pih-radius-none);
+  border: 0; border-bottom: var(--pih-border-width) solid var(--cds-border-strong-01);
+  background: var(--cds-field-01); color: var(--cds-text-primary); min-width: 0;
+}
+.card .select, .card .input { background: var(--cds-field-02); }
+.select.is-focus, .input.is-focus, .select:focus, .input:focus { outline: var(--pih-focus-width) solid var(--cds-focus); outline-offset: calc(var(--pih-focus-width) * -1); }
+.select.is-disabled, .input.is-disabled { color: var(--cds-text-disabled); border-bottom-color: transparent; }
+.input::placeholder { color: var(--cds-text-placeholder); }
+.mono { font-family: var(--pih-font-family-mono); }
+.switch { display: inline-flex; align-items: center; gap: var(--cds-spacing-03); cursor: pointer; font-size: var(--cds-body-01-font-size); }
+.switch i {
+  width: var(--pih-toggle-width); height: var(--pih-toggle-height); border-radius: var(--pih-radius-full); background: var(--cds-toggle-off);
+  position: relative; flex: none; transition: background var(--cds-duration-fast-02) var(--cds-easing-productive-standard);
+}
+.switch i::after {
+  content: ""; position: absolute; top: calc((var(--pih-toggle-height) - var(--pih-toggle-knob)) / 2); left: calc((var(--pih-toggle-height) - var(--pih-toggle-knob)) / 2);
+  width: var(--pih-toggle-knob); height: var(--pih-toggle-knob); border-radius: var(--pih-radius-full); background: var(--cds-icon-on-color);
+  transition: left var(--cds-duration-fast-02) var(--cds-easing-productive-standard);
+}
+.switch[aria-checked="true"] i { background: var(--cds-support-success); }
+.switch[aria-checked="true"] i::after { left: calc(var(--pih-toggle-width) - var(--pih-toggle-knob) - (var(--pih-toggle-height) - var(--pih-toggle-knob)) / 2); }
+.switch.is-disabled { color: var(--cds-text-disabled); cursor: not-allowed; }
+.switch.is-disabled i { background: var(--cds-button-disabled); }
+.card { background: var(--cds-layer-01); padding: var(--cds-spacing-05); display: flex; flex-direction: column; gap: var(--cds-spacing-04); min-width: 0; }
+.card h3 { margin: 0; font-size: var(--cds-heading-compact-01-font-size); line-height: var(--cds-heading-compact-01-line-height); font-weight: var(--pih-font-weight-semibold); }
+.dot { width: var(--pih-status-dot); height: var(--pih-status-dot); border-radius: var(--pih-radius-full); flex: none; background: var(--cds-border-strong-01); }
+.dot.ok { background: var(--cds-support-success); } .dot.warn { background: var(--cds-support-warning); } .dot.err { background: var(--cds-support-error); } .dot.info { background: var(--cds-support-info); }
+.status-list { display: flex; flex-direction: column; }
+.status-row { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: var(--cds-spacing-04); align-items: center; padding: var(--cds-spacing-04) 0; border-bottom: var(--pih-border-width) solid var(--cds-border-subtle-01); }
+.card .status-row { border-bottom-color: var(--cds-layer-02); }
+.status-row:last-child { border-bottom: 0; }
+.status-row .detail { display: block; color: var(--cds-text-helper); font-size: var(--cds-helper-text-01-font-size); line-height: var(--cds-helper-text-01-line-height); overflow-wrap: anywhere; }
+.status-row .state-text { font-size: var(--cds-label-01-font-size); color: var(--cds-text-secondary); text-align: right; }
+.banner {
+  display: flex; gap: var(--cds-spacing-04); align-items: flex-start; padding: var(--cds-spacing-04) var(--cds-spacing-05);
+  background: var(--cds-layer-01); border-left: var(--pih-accent-border-width) solid var(--cds-support-info);
+  font-size: var(--cds-body-01-font-size); line-height: var(--cds-body-01-line-height);
+}
+.banner.warn { border-left-color: var(--cds-support-warning); }
+.banner.err { border-left-color: var(--cds-support-error); }
+.banner.info { border-left-color: var(--cds-support-info); }
+.banner .dot { margin-top: var(--cds-spacing-02); }
+.card .banner { background: var(--cds-layer-02); }
+.steps { display: flex; gap: 0; flex-wrap: wrap; }
+.step {
+  display: flex; align-items: center; gap: var(--cds-spacing-03); font-size: var(--cds-label-01-font-size); color: var(--cds-text-helper);
+  padding: var(--cds-spacing-03) var(--cds-spacing-05) var(--cds-spacing-03) 0; min-width: calc(var(--cds-spacing-10) * 2);
+  border-top: var(--pih-accent-border-width) solid var(--cds-border-subtle-01); margin-right: var(--cds-spacing-01);
+}
+.step[data-state="current"] { color: var(--cds-text-primary); border-top-color: var(--cds-border-interactive); font-weight: var(--pih-font-weight-semibold); }
+.step[data-state="done"] { color: var(--cds-text-secondary); border-top-color: var(--cds-border-interactive); }
+.step .n { font-family: var(--pih-font-family-mono); }
+.preview {
+  aspect-ratio: 16 / 9; background: var(--cds-layer-01);
+  display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden;
+}
+.preview .crop { position: absolute; top: var(--cds-spacing-03); bottom: var(--cds-spacing-03); aspect-ratio: 9 / 19.5; border: var(--pih-focus-width) dashed var(--cds-interactive); }
+.preview.empty { color: var(--cds-text-helper); font-size: var(--cds-label-01-font-size); }
+.two-col { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: var(--cds-spacing-05); }
+.qr { width: calc(var(--cds-spacing-09) * 3); aspect-ratio: 1; flex: none; background:
+  repeating-linear-gradient(90deg, var(--cds-text-primary) 0 var(--cds-spacing-03), transparent var(--cds-spacing-03) var(--cds-spacing-05)),
+  repeating-linear-gradient(0deg, var(--cds-layer-01) 0 var(--cds-spacing-03), transparent var(--cds-spacing-03) calc(var(--cds-spacing-03) * 3));
+  border: var(--cds-spacing-03) solid var(--cds-text-primary); }
+.tabs { display: flex; }
+.tab {
+  padding: var(--cds-spacing-04) var(--cds-spacing-05) var(--cds-spacing-03); color: var(--cds-text-secondary); cursor: pointer;
+  border-bottom: var(--pih-focus-width) solid var(--cds-border-subtle-01); font-size: var(--cds-body-01-font-size); white-space: nowrap;
+}
+.tab[aria-selected="true"] { color: var(--cds-text-primary); border-bottom-color: var(--cds-border-interactive); font-weight: var(--pih-font-weight-semibold); }
+.tabs::after { content: ""; flex: 1; border-bottom: var(--pih-focus-width) solid var(--cds-border-subtle-01); }
+.form-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: var(--cds-spacing-06) var(--cds-spacing-05); }
+.range { width: 100%; accent-color: var(--cds-interactive); }
+.muted { color: var(--cds-text-helper); font-size: var(--cds-helper-text-01-font-size); line-height: var(--cds-helper-text-01-line-height); }
+.spinner { width: var(--cds-spacing-05); height: var(--cds-spacing-05); border-radius: var(--pih-radius-full); border: var(--pih-focus-width) solid var(--cds-layer-02); border-top-color: var(--cds-interactive); animation: spin 690ms linear infinite; flex: none; }
+@keyframes spin { to { transform: rotate(360deg); } }
+.link { color: var(--cds-link-primary); text-decoration: none; font-size: var(--cds-body-01-font-size); }
+.link:hover { color: var(--cds-link-primary-hover); text-decoration: underline; }
+.phone-preview { height: 100%; aspect-ratio: 9 / 19.5; margin: 0 auto; border-radius: var(--cds-spacing-05); border: var(--pih-border-width) solid var(--cds-border-strong-01); background: var(--cds-background); overflow: hidden; }
+
+/* ---- スマホ画面の見本（キャプチャ映像の代わり） ---- */
+.fake-screen { width: 100%; height: 100%; display: flex; flex-direction: column; gap: var(--cds-spacing-03); padding: var(--cds-spacing-04); background: var(--cds-layer-01); }
+.fake-screen .bar { height: var(--cds-spacing-06); border-radius: var(--pih-radius-full); background: var(--cds-layer-02); }
+.fake-screen .line { height: var(--cds-spacing-03); border-radius: var(--pih-radius-full); background: var(--cds-layer-02); }
+.fake-screen .line.s { width: 60%; } .fake-screen .line.m { width: 85%; }
+.fake-screen .block { height: var(--cds-spacing-09); background: var(--cds-layer-02); }
+.touch-dot { position: absolute; width: var(--cds-spacing-06); height: var(--cds-spacing-06); border-radius: var(--pih-radius-full); background: var(--cds-text-primary); opacity: 0.55; }
+
+/* ---- VR内の表示 ---- */
+.vr-scene {
+  width: var(--pih-desktop-window-width); height: calc(var(--pih-desktop-window-height) * 0.8);
+  background: linear-gradient(var(--pih-vr-sky-top), var(--pih-vr-sky-bottom)); position: relative; overflow: hidden;
+}
+.vr-scene .floor { position: absolute; left: 0; right: 0; bottom: 0; height: 35%; background: repeating-linear-gradient(90deg, transparent 0 calc(var(--cds-spacing-09) * 2 - 1px), var(--cds-border-subtle-01) 0 calc(var(--cds-spacing-09) * 2)); opacity: 0.5; }
+.vr-hand { position: absolute; }
+.vr-panel {
+  position: absolute; width: calc(var(--cds-spacing-09) * 3.2); aspect-ratio: 9 / 19.5; border-radius: var(--cds-spacing-05);
+  border: var(--cds-spacing-02) solid var(--pih-vr-sky-bottom); overflow: hidden; background: var(--cds-layer-01);
+}
+.vr-panel.dimmed { opacity: 0.45; }
+.vr-chip {
+  position: absolute; display: inline-flex; align-items: center; gap: var(--cds-spacing-03); padding: var(--cds-spacing-02) var(--cds-spacing-04);
+  border-radius: var(--pih-radius-full); background: var(--cds-layer-01);
+  font-size: var(--cds-label-01-font-size); color: var(--cds-text-secondary); white-space: nowrap;
+}
+.vr-caption { position: absolute; left: var(--cds-spacing-05); bottom: var(--cds-spacing-05); font-size: var(--cds-label-01-font-size); color: var(--cds-text-secondary); }
+
+/* ---- Androidアプリ ---- */
+.phone {
+  width: var(--pih-phone-width); height: var(--pih-phone-height); border-radius: var(--pih-radius-device);
+  border: var(--cds-spacing-03) solid var(--pih-vr-sky-bottom); outline: var(--pih-border-width) solid var(--cds-border-strong-01);
+  background: var(--cds-background); overflow: hidden; display: flex; flex-direction: column;
+}
+.phone-status { height: var(--cds-spacing-07); flex: none; display: flex; align-items: center; justify-content: space-between; padding: 0 var(--cds-spacing-06); font-size: var(--cds-label-01-font-size); color: var(--cds-text-secondary); }
+.phone-header { height: var(--pih-header-height); flex: none; display: flex; align-items: center; padding: 0 var(--cds-spacing-05); border-bottom: var(--pih-border-width) solid var(--cds-border-subtle-01); font-size: var(--cds-heading-compact-01-font-size); font-weight: var(--pih-font-weight-semibold); }
+.phone-body { flex: 1; padding: var(--cds-spacing-05); display: flex; flex-direction: column; gap: var(--cds-spacing-05); min-height: 0; }
+.btn-block { width: 100%; height: var(--pih-header-height); }
+.big-state { display: flex; flex-direction: column; align-items: flex-start; gap: var(--cds-spacing-03); padding: var(--cds-spacing-05); background: var(--cds-layer-01); border-left: var(--pih-accent-border-width) solid var(--cds-border-strong-01); }
+.big-state.ok { border-left-color: var(--cds-support-success); }
+.big-state.err { border-left-color: var(--cds-support-error); }
+.big-state b { font-size: var(--cds-heading-02-font-size); line-height: var(--cds-heading-02-line-height); font-weight: var(--pih-font-weight-semibold); display: flex; align-items: center; gap: var(--cds-spacing-03); }
+.kv { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 0; font-size: var(--cds-body-01-font-size); margin: 0; }
+.kv dt, .kv dd { padding: var(--cds-spacing-04) 0; border-bottom: var(--pih-border-width) solid var(--cds-border-subtle-01); }
+.kv dt { color: var(--cds-text-secondary); } .kv dd { margin: 0; text-align: right; overflow-wrap: anywhere; }
+.notif { margin: 0 var(--cds-spacing-03) var(--cds-spacing-03); padding: var(--cds-spacing-04) var(--cds-spacing-05); border-radius: var(--cds-spacing-05); background: var(--cds-layer-02); font-size: var(--cds-label-01-font-size); }
+.notif b { display: block; font-weight: var(--pih-font-weight-semibold); }
+
+/* ---- 決まったこと ---- */
+.decisions { border-top: var(--pih-focus-width) solid var(--cds-border-strong-01); padding-top: var(--cds-spacing-06); display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--cds-spacing-07); }
+.decisions h2 { font-size: var(--cds-heading-02-font-size); margin: 0 0 var(--cds-spacing-04); font-weight: var(--pih-font-weight-semibold); }
+.decisions ol, .decisions ul { margin: 0; padding-left: var(--cds-spacing-06); display: flex; flex-direction: column; gap: var(--cds-spacing-03); color: var(--cds-text-secondary); font-size: var(--cds-label-01-font-size); }
+.decisions li b { color: var(--cds-text-primary); }
+</style>
+</head>
+<body>
+
+<header class="mock-toolbar">
+  <h1 data-i18n="mock.title"></h1>
+  <span class="mock-note" data-i18n="mock.note"></span>
+  <div class="seg" id="lang-seg" aria-label="language">
+    <button data-lang="ja">日本語</button><button data-lang="en">English</button><button data-lang="zh-Hans">简体中文</button>
+  </div>
+  <div class="seg" id="theme-seg">
+    <button data-theme-btn="dark" data-i18n="mock.theme_dark"></button><button data-theme-btn="light" data-i18n="mock.theme_light"></button>
+  </div>
+</header>
+
+<main class="mock-main">
+
+<!-- ===================== S03 設定 ===================== -->
+<section data-screen="S03" class="screen">
+  <div class="screen-head"><span class="screen-id">S03</span><h2 class="screen-name" data-i18n="mock.screen.s03"></h2></div>
+  <p class="screen-desc" data-i18n="mock.screen.s03_desc"></p>
+  <div class="states">
+
+    <div class="state">
+      <span class="state-label"><b>S03a</b><span data-i18n="mock.state.s03a"></span></span>
+      <div class="win">
+        <div class="win-titlebar"><span class="glyph"></span><span data-i18n="app.name"></span><span class="spacer"></span><span class="ctl">–</span><span class="ctl">□</span><span class="ctl">×</span></div>
+        <div class="win-body">
+          <nav class="sidebar"><a class="nav-item" href="#" data-i18n-label="nav.home"><svg class="nav-icon" viewBox="0 0 20 20" aria-hidden="true"><path d="M10 2.5 2 9h2v8.5h4.5v-5h3v5H16V9h2z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg></a><a class="nav-item" href="#" aria-current="page" data-i18n-label="nav.settings"><svg class="nav-icon" viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="7.25" fill="none" stroke="currentColor" stroke-width="3" stroke-dasharray="2.85 2.84" transform="rotate(-10 10 10)"/><circle cx="10" cy="10" r="5.5" fill="none" stroke="currentColor" stroke-width="1.5"/><circle cx="10" cy="10" r="2" fill="none" stroke="currentColor" stroke-width="1.5"/></svg></a></nav>
+          <div class="content">
+            <h2 data-i18n="nav.settings"></h2>
+            <div class="tabs"><span class="tab" aria-selected="true" data-i18n="settings.tab.display"></span><span class="tab" data-i18n="settings.tab.position"></span><span class="tab" data-i18n="settings.tab.input"></span><span class="tab" data-i18n="settings.tab.vrchat"></span><span class="tab" data-i18n="settings.tab.general"></span></div>
+            <div class="form-grid">
+              <label class="field"><span data-i18n="settings.display.size"></span><input type="range" class="range" value="50"><span class="muted" data-i18n="settings.display.size_value" data-vars='{"inch":"6.7"}'></span></label>
+              <label class="field"><span data-i18n="settings.display.brightness"></span><input type="range" class="range" value="80"></label>
+              <label class="field"><span data-i18n="video.source_label"></span><select class="select"><option data-i18n="video.source.hdmi"></option></select></label>
+              <label class="field"><span data-i18n="settings.display.crop"></span><select class="select"><option data-i18n="settings.display.crop_auto"></option></select></label>
+              <label class="field"><span data-i18n="wizard.calibrate.source_label"></span><select class="select"><option data-i18n="pose.source.controller"></option></select></label>
+              <label class="field"><span data-i18n="wizard.calibrate.side_label"></span><select class="select"><option data-i18n="side.right"></option></select></label>
+            </div>
+            <span class="switch" role="switch" aria-checked="true"><i></i><span data-i18n="settings.input.show_touches"></span></span>
+            <span class="switch" role="switch" aria-checked="true"><i></i><span data-i18n="settings.input.keep_awake"></span></span>
+            <div class="row end"><button class="btn btn-primary" data-i18n="common.save"></button></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="state">
+      <span class="state-label"><b>S03b</b><span data-i18n="mock.state.s03b"></span></span>
+      <div class="win">
+        <div class="win-titlebar"><span class="glyph"></span><span data-i18n="app.name"></span><span class="spacer"></span><span class="ctl">–</span><span class="ctl">□</span><span class="ctl">×</span></div>
+        <div class="win-body">
+          <nav class="sidebar"><a class="nav-item" href="#" data-i18n-label="nav.home"><svg class="nav-icon" viewBox="0 0 20 20" aria-hidden="true"><path d="M10 2.5 2 9h2v8.5h4.5v-5h3v5H16V9h2z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg></a><a class="nav-item" href="#" aria-current="page" data-i18n-label="nav.settings"><svg class="nav-icon" viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="7.25" fill="none" stroke="currentColor" stroke-width="3" stroke-dasharray="2.85 2.84" transform="rotate(-10 10 10)"/><circle cx="10" cy="10" r="5.5" fill="none" stroke="currentColor" stroke-width="1.5"/><circle cx="10" cy="10" r="2" fill="none" stroke="currentColor" stroke-width="1.5"/></svg></a></nav>
+          <div class="content">
+            <h2 data-i18n="nav.settings"></h2>
+            <div class="tabs"><span class="tab" data-i18n="settings.tab.display"></span><span class="tab" data-i18n="settings.tab.position"></span><span class="tab" data-i18n="settings.tab.input"></span><span class="tab" aria-selected="true" data-i18n="settings.tab.vrchat"></span><span class="tab" data-i18n="settings.tab.general"></span></div>
+            <div class="form-grid">
+              <label class="field"><span data-i18n="settings.vrchat.send_port"></span><input class="input mono" value="9000"></label>
+              <label class="field"><span data-i18n="settings.vrchat.receive_port"></span><input class="input mono" value="9001"></label>
+              <label class="field"><span data-i18n="settings.vrchat.param_visible"></span><input class="input mono" value="PhoneInHand/Visible"></label>
+              <label class="field"><span data-i18n="settings.vrchat.param_hand"></span><input class="input mono" value="PhoneInHand/IsLeft"></label>
+            </div>
+            <div class="banner info"><span class="dot info"></span><span data-i18n="settings.vrchat.bits_note"></span></div>
+            <div class="row loose"><button class="btn" data-i18n="settings.vrchat.open_package"></button><a class="link" href="#" data-i18n="wizard.vrchat.guide_link"></a></div>
+            <div class="row end"><button class="btn btn-primary" data-i18n="common.save"></button></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="state">
+      <span class="state-label"><b>S03c</b><span data-i18n="mock.state.s03c"></span></span>
+      <div class="win">
+        <div class="win-titlebar"><span class="glyph"></span><span data-i18n="app.name"></span><span class="spacer"></span><span class="ctl">–</span><span class="ctl">□</span><span class="ctl">×</span></div>
+        <div class="win-body">
+          <nav class="sidebar"><a class="nav-item" href="#" data-i18n-label="nav.home"><svg class="nav-icon" viewBox="0 0 20 20" aria-hidden="true"><path d="M10 2.5 2 9h2v8.5h4.5v-5h3v5H16V9h2z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg></a><a class="nav-item" href="#" aria-current="page" data-i18n-label="nav.settings"><svg class="nav-icon" viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="7.25" fill="none" stroke="currentColor" stroke-width="3" stroke-dasharray="2.85 2.84" transform="rotate(-10 10 10)"/><circle cx="10" cy="10" r="5.5" fill="none" stroke="currentColor" stroke-width="1.5"/><circle cx="10" cy="10" r="2" fill="none" stroke="currentColor" stroke-width="1.5"/></svg></a></nav>
+          <div class="content">
+            <h2 data-i18n="nav.settings"></h2>
+            <div class="tabs"><span class="tab" data-i18n="settings.tab.display"></span><span class="tab" data-i18n="settings.tab.position"></span><span class="tab" data-i18n="settings.tab.input"></span><span class="tab" data-i18n="settings.tab.vrchat"></span><span class="tab" aria-selected="true" data-i18n="settings.tab.general"></span></div>
+            <div class="form-grid">
+              <label class="field"><span data-i18n="settings.general.language"></span><select class="select"><option data-i18n="settings.general.language_auto"></option></select></label>
+              <label class="field"><span data-i18n="settings.general.theme"></span><select class="select"><option data-i18n="settings.general.theme_system"></option></select></label>
+            </div>
+            <span class="switch" role="switch" aria-checked="true"><i></i><span data-i18n="settings.general.start_with_steamvr"></span></span>
+            <span class="switch" role="switch" aria-checked="false"><i></i><span data-i18n="settings.general.start_minimized"></span></span>
+            <a class="link" href="#" data-i18n="settings.general.unlock_help"></a>
+            <div class="card">
+              <h3 data-i18n="mock.components_title"></h3>
+              <div class="row">
+                <button class="btn btn-primary" data-i18n="mock.comp.default"></button>
+                <button class="btn btn-primary is-hover" data-i18n="mock.comp.hover"></button>
+                <button class="btn btn-primary is-focus" data-i18n="mock.comp.focus"></button>
+                <button class="btn btn-primary is-disabled" disabled data-i18n="mock.comp.disabled"></button>
+              </div>
+              <div class="row">
+                <button class="btn" data-i18n="mock.comp.default"></button>
+                <button class="btn is-hover" data-i18n="mock.comp.hover"></button>
+                <button class="btn is-focus" data-i18n="mock.comp.focus"></button>
+                <button class="btn is-disabled" disabled data-i18n="mock.comp.disabled"></button>
+              </div>
+              <div class="row">
+                <input class="input" value="9000" style="width:calc(var(--cds-spacing-09) * 2)">
+                <input class="input is-focus" value="9000" style="width:calc(var(--cds-spacing-09) * 2)">
+                <input class="input is-disabled" value="9000" disabled style="width:calc(var(--cds-spacing-09) * 2)">
+                <span class="switch is-disabled" role="switch" aria-checked="false"><i></i><span data-i18n="mock.comp.disabled"></span></span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+</main>
+
+<script>
+const dict = {
+  "ja": {
+    "settings.general.unlock_help": "ロック解除の案内をもう一度見る",
+    "video.source.hdmi": "HDMIキャプチャ",
+    "video.source_label": "映像の取り込み方法",
+    "side.right": "右",
+    "wizard.calibrate.side_label": "スマホを付ける側",
+    "pose.source.controller": "コントローラーに固定",
+    "wizard.calibrate.source_label": "位置の基準",
+    "mock.title": "phone_in_hand モック",
+    "mock.note": "見た目だけで、中身はない。クリックしても動作しません。",
+    "mock.theme_dark": "ダーク",
+    "mock.theme_light": "ライト",
+    "mock.screen.s03": "設定",
+    "mock.screen.s03_desc": "表示・位置・入力・VRChat・一般の5つのタブ。",
+    "mock.state.s03a": "表示タブ",
+    "mock.state.s03b": "VRChatタブ",
+    "mock.state.s03c": "一般タブと基本部品の状態",
+    "mock.components_title": "基本部品の状態",
+    "mock.comp.default": "通常",
+    "mock.comp.hover": "ホバー",
+    "mock.comp.focus": "フォーカス",
+    "mock.comp.disabled": "無効",
+    "app.name": "Phone in Hand",
+    "nav.home": "ホーム",
+    "nav.settings": "設定",
+    "common.save": "保存",
+    "wizard.vrchat.guide_link": "アバターへの組み込み方",
+    "settings.tab.display": "表示",
+    "settings.tab.position": "位置",
+    "settings.tab.input": "入力",
+    "settings.tab.vrchat": "VRChat",
+    "settings.tab.general": "一般",
+    "settings.display.size": "パネルの大きさ",
+    "settings.display.size_value": "実寸（{inch} インチ）",
+    "settings.display.brightness": "明るさ",
+    "settings.display.crop": "切り抜き",
+    "settings.display.crop_auto": "自動",
+    "settings.input.show_touches": "「タップを表示」を自動でオンにする",
+    "settings.input.keep_awake": "VRChatとつながっている間はスマホの画面を消さない",
+    "settings.vrchat.send_port": "送信ポート",
+    "settings.vrchat.receive_port": "受信ポート",
+    "settings.vrchat.param_visible": "表示のパラメータ名",
+    "settings.vrchat.param_hand": "持ち手のパラメータ名",
+    "settings.vrchat.bits_note": "アバターの同期パラメータを2ビット使います（表示、持ち手）。",
+    "settings.vrchat.open_package": "アバター用パッケージのフォルダを開く",
+    "settings.general.language": "言語",
+    "settings.general.language_auto": "システムに合わせる",
+    "settings.general.theme": "テーマ",
+    "settings.general.theme_system": "システムに合わせる",
+    "settings.general.start_with_steamvr": "SteamVRと一緒に起動する",
+    "settings.general.start_minimized": "起動時にウィンドウを最小化する"
+  },
+  "en": {
+    "settings.general.unlock_help": "View the unlock guide again",
+    "video.source.hdmi": "HDMI capture",
+    "video.source_label": "Video source",
+    "side.right": "Right",
+    "wizard.calibrate.side_label": "Side the phone is on",
+    "pose.source.controller": "Attached to controller",
+    "wizard.calibrate.source_label": "Position source",
+    "mock.title": "phone_in_hand mock",
+    "mock.note": "Visual only — nothing works. Clicking does nothing.",
+    "mock.theme_dark": "Dark",
+    "mock.theme_light": "Light",
+    "mock.screen.s03": "Settings",
+    "mock.screen.s03_desc": "Five tabs: Display, Position, Input, VRChat, General.",
+    "mock.state.s03a": "Display tab",
+    "mock.state.s03b": "VRChat tab",
+    "mock.state.s03c": "General tab and component states",
+    "mock.components_title": "Component states",
+    "mock.comp.default": "Default",
+    "mock.comp.hover": "Hover",
+    "mock.comp.focus": "Focus",
+    "mock.comp.disabled": "Disabled",
+    "app.name": "Phone in Hand",
+    "nav.home": "Home",
+    "nav.settings": "Settings",
+    "common.save": "Save",
+    "wizard.vrchat.guide_link": "How to add it to your avatar",
+    "settings.tab.display": "Display",
+    "settings.tab.position": "Position",
+    "settings.tab.input": "Input",
+    "settings.tab.vrchat": "VRChat",
+    "settings.tab.general": "General",
+    "settings.display.size": "Panel size",
+    "settings.display.size_value": "Actual size ({inch} in)",
+    "settings.display.brightness": "Brightness",
+    "settings.display.crop": "Crop",
+    "settings.display.crop_auto": "Automatic",
+    "settings.input.show_touches": "Turn on \"Show taps\" automatically",
+    "settings.input.keep_awake": "Keep the phone screen on while connected to VRChat",
+    "settings.vrchat.send_port": "Send port",
+    "settings.vrchat.receive_port": "Receive port",
+    "settings.vrchat.param_visible": "Visibility parameter",
+    "settings.vrchat.param_hand": "Hand parameter",
+    "settings.vrchat.bits_note": "Uses 2 bits of synced avatar parameters (visibility, hand).",
+    "settings.vrchat.open_package": "Open the avatar package folder",
+    "settings.general.language": "Language",
+    "settings.general.language_auto": "Match system",
+    "settings.general.theme": "Theme",
+    "settings.general.theme_system": "Match system",
+    "settings.general.start_with_steamvr": "Start with SteamVR",
+    "settings.general.start_minimized": "Start minimized"
+  },
+  "zh-Hans": {
+    "settings.general.unlock_help": "再次查看解锁指南",
+    "video.source.hdmi": "HDMI采集",
+    "video.source_label": "视频来源",
+    "side.right": "右",
+    "wizard.calibrate.side_label": "手机安装在哪一侧",
+    "pose.source.controller": "固定在控制器上",
+    "wizard.calibrate.source_label": "位置基准",
+    "mock.title": "phone_in_hand 原型",
+    "mock.note": "仅展示外观，没有实际功能。点击不会有反应。",
+    "mock.theme_dark": "深色",
+    "mock.theme_light": "浅色",
+    "mock.screen.s03": "设置",
+    "mock.screen.s03_desc": "显示、位置、输入、VRChat、通用五个标签页。",
+    "mock.state.s03a": "显示标签页",
+    "mock.state.s03b": "VRChat标签页",
+    "mock.state.s03c": "通用标签页与基础组件状态",
+    "mock.components_title": "基础组件状态",
+    "mock.comp.default": "默认",
+    "mock.comp.hover": "悬停",
+    "mock.comp.focus": "焦点",
+    "mock.comp.disabled": "禁用",
+    "app.name": "Phone in Hand",
+    "nav.home": "主页",
+    "nav.settings": "设置",
+    "common.save": "保存",
+    "wizard.vrchat.guide_link": "如何添加到虚拟形象",
+    "settings.tab.display": "显示",
+    "settings.tab.position": "位置",
+    "settings.tab.input": "输入",
+    "settings.tab.vrchat": "VRChat",
+    "settings.tab.general": "通用",
+    "settings.display.size": "面板大小",
+    "settings.display.size_value": "实际尺寸（{inch} 英寸）",
+    "settings.display.brightness": "亮度",
+    "settings.display.crop": "裁剪",
+    "settings.display.crop_auto": "自动",
+    "settings.input.show_touches": "自动开启“显示点按操作”",
+    "settings.input.keep_awake": "与VRChat连接期间保持手机屏幕常亮",
+    "settings.vrchat.send_port": "发送端口",
+    "settings.vrchat.receive_port": "接收端口",
+    "settings.vrchat.param_visible": "显示参数名",
+    "settings.vrchat.param_hand": "持握手参数名",
+    "settings.vrchat.bits_note": "使用虚拟形象同步参数中的2位（显示、持握手）。",
+    "settings.vrchat.open_package": "打开虚拟形象资源包文件夹",
+    "settings.general.language": "语言",
+    "settings.general.language_auto": "跟随系统",
+    "settings.general.theme": "主题",
+    "settings.general.theme_system": "跟随系统",
+    "settings.general.start_with_steamvr": "随SteamVR一起启动",
+    "settings.general.start_minimized": "启动时最小化窗口"
+  }
+};
+
+let lang = "ja";
+function t(key) {
+  return (dict[lang] && dict[lang][key]) ?? dict.ja[key] ?? key;
+}
+function render() {
+  document.documentElement.lang = lang;
+  document.querySelectorAll("[data-i18n]").forEach(el => {
+    let s = t(el.dataset.i18n);
+    if (el.dataset.vars) {
+      const v = JSON.parse(el.dataset.vars);
+      s = s.replace(/\{(\w+)\}/g, (_, k) => v[k] ?? "");
+    }
+    el.textContent = s;
+  });
+  document.querySelectorAll("[data-i18n-label]").forEach(el => {
+    const s = t(el.dataset.i18nLabel);
+    el.setAttribute("aria-label", s);
+    el.setAttribute("title", s);
+  });
+  document.querySelectorAll("#lang-seg button").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.lang === lang)));
+  const theme = document.documentElement.dataset.theme;
+  document.querySelectorAll("#theme-seg button").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.themeBtn === theme)));
+}
+document.querySelectorAll("#lang-seg button").forEach(b => b.addEventListener("click", () => { lang = b.dataset.lang; render(); }));
+document.querySelectorAll("#theme-seg button").forEach(b => b.addEventListener("click", () => { document.documentElement.dataset.theme = b.dataset.themeBtn; render(); }));
+render();
+</script>
+</body>
+</html>
