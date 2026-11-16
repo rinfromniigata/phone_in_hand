@@ -5,7 +5,7 @@
 
 ## Phase 1: 基盤
 Phaseの推奨: Opus・high以上
-引き継ぎ: T1-1〜T1-7は完了。次はW1-1（`bun run check`）とW1-2（ユーザーの確認）。T1はOpus・lowで実施したため、W1で問題が出たら推奨（Opus・high）で見直す。Phase 2では、実装した画面のキーを`scripts/i18n_pending.json`から消す
+引き継ぎ: Phase 1は完了（W1-1・W1-2通過）。次はT2-1。Phase 2では、実装した画面のキーを`scripts/i18n_pending.json`から消す
 - [x] T1-1 【エージェント】プロジェクトの骨格を作る：Tauri 2系＋Bun＋TypeScript＋SvelteKit（静的出力）＋carbon-components-svelte、Cargoのワークスペース（`crates/pih_core`、`src-tauri`）。識別子`com.rinontech.phone-in-hand`、ウィンドウ960×680、対象はWindows x64だけ
   - 推奨: Sonnet・high以上
   - 各ライブラリの版とAPI、初期化のコマンドは、インストールする版の公式ドキュメントで確かめる
