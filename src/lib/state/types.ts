@@ -93,6 +93,32 @@ export type AppSnapshot = {
 	calibration: CalibrationStatus;
 };
 
+// ---- 映像（ウィンドウの一覧とプレビュー） ----
+
+export type WindowInfo = { title: string; executable: string };
+
+/** `preview_frame`：切り抜く前の縮小画像（JPEG、base64）と、元の大きさでの切り抜きの範囲 */
+export type PreviewFrame = {
+	jpeg: string;
+	width: number;
+	height: number;
+	frame: Size;
+	crop: Rect;
+};
+
+// ---- 位置合わせ ----
+
+/** `calibration_progress`：位置合わせの進み具合 */
+export type CalibrationProgress = { state: 'running' | 'finished' | 'cancelled' | 'failed' };
+
+// ---- VR内の表示に使う画像（UIが描いて渡す） ----
+
+/** VR内の状態のチップ。辞書のキー `vr.chip.*` に対応する */
+export type Chip = 'tracking' | 'sensor_lost' | 'hand_lost' | 'screen_off';
+/** RGBA（1画素4バイト）を base64 にしたもの */
+export type RgbaImage = { width: number; height: number; rgba: string };
+export type OverlayImages = { chips: Partial<Record<Chip, RgbaImage>>; sample: RgbaImage | null };
+
 // ---- コマンドの失敗 ----
 
 export type ErrorCode = 'unavailable' | 'not_found' | 'invalid' | 'corrupt' | 'io';

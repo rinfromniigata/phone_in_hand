@@ -12,8 +12,9 @@ PCアプリはWindows x64だけを対象にしています（SteamVRとPC版VRCh
 - [Bun](https://bun.sh/) 1.4以上
 - Node.js 22.17以上（SvelteKitとViteの実行に使う）
 - [Rust](https://www.rust-lang.org/tools/install)（stable。版と部品は`rust-toolchain.toml`で指定）
-- Visual Studio Build Tools（「C++によるデスクトップ開発」。MSVCのリンカーとWindows SDK）
+- Visual Studio Build Tools（「C++によるデスクトップ開発」。MSVCのC++コンパイラー・リンカーとWindows SDK。OpenVRの薄い層`src-tauri/native/`のビルドにも使う）
 - Microsoft Edge WebView2 Runtime（Windows 11には入っている）
+- VRでの確認には、SteamVRとヘッドセット。SteamVRがなくてもアプリは起動し、VRの機能は「使用できません」になる
 
 Tauriの前提条件の詳細は、[Tauriの公式ドキュメント](https://v2.tauri.app/start/prerequisites/)を確かめてください。
 
@@ -60,6 +61,18 @@ bun run check
 - トークンの検査（`scripts/check_tokens.ts`）：`roadmap/specs/`の最新版と、`src/lib/theme/tokens.css`・`docs/brand/`の一致。`src/`のスタイルの色・サイズの直書き
 - `cargo fmt --check`、`cargo clippy -- -D warnings`、`cargo test`
 
+デスクトップの実際のウィンドウを取り込むテストは、CIでは動かないため既定では飛ばします。手元で確かめるときは次を実行します。
+
+```powershell
+cargo test -p phone_in_hand -- --ignored
+```
+
+### SteamVR（OpenVR）とのつなぎ
+
+- OpenVR SDK（v2.15.6、BSD-3-Clause）の`openvr.h`と`openvr_api.dll`を`src-tauri/vendor/openvr/`に置いている。`src-tauri/native/pih_openvr.cpp`が公式のC++ APIを呼ぶ薄い層で、`build.rs`がアプリに組み込む。`openvr_api.dll`は実行時に読み込み、インストーラーには実行ファイルと同じ場所に同梱する
+- 位置合わせの入力（グリップとトリガー）の定義は`src-tauri/resources/openvr/`（`actions.json`と、コントローラーごとの既定の割り当て）。割り当ては、SteamVRのコントローラーの設定から変えられる
+- 「SteamVRと一緒に起動する」は、アプリデータのフォルダに書く`phone_in_hand.vrmanifest`をSteamVRに登録して行う。`tauri dev`で有効にすると、開発用の実行ファイルが登録される
+
 ### 守ること
 
 - **値**：色・サイズ・形の正本は`src/lib/theme/tokens.css`（`roadmap/specs/`のトークンのコピー）。部品には`var(--cds-*)`・`var(--pih-*)`で参照し、値を直書きしない。Carbonの部品のCSSは`@layer carbon`に入れて読み込んでいるため、`tokens.css`の値が優先される（`scripts/vite_carbon_css.ts`）
@@ -73,7 +86,7 @@ bun run check
 
 ## データの保存場所
 
-アプリのデータは`%APPDATA%\com.rinontech.phone-in-hand\`に置かれます（`settings.json`、`calibration.json`など）。読めないファイルは`*.broken`に名前を変えて残し、既定値で起動します。
+アプリのデータは`%APPDATA%\com.rinontech.phone-in-hand\`に置かれます（`settings.json`、`calibration.json`、`phone_in_hand.vrmanifest`など）。読めないファイルは`*.broken`に名前を変えて残し、既定値で起動します。
 
 ## リポジトリ構成
 
@@ -85,11 +98,15 @@ phone_in_hand/
 │  ├─ lib/state/           Rust側の状態と設定を受け持つストア、Tauriのコマンドの呼び出し
 │  ├─ lib/components/      画面をまたいで使う部品
 │  ├─ lib/dev/             開発時だけの切り替え（公開版には含まれない）
-│  └─ routes/              画面（home、settings など）
+│  ├─ lib/vr/              VR内のチップと位置合わせの見本の画像を描く
+│  └─ routes/              画面（home、settings、calibrate、video/window など）
 ├─ messages/               辞書（ja・en・zh-Hans。jaが原文）
 ├─ project.inlang/         Paraglideのプロジェクトの設定
 ├─ crates/pih_core/        Tauriに依存しないロジック（型、トレイト、設定のモデルと保存）。単体テストの中心
-├─ src-tauri/              Tauriのアプリと、OS・機器に依存する実装
+├─ src-tauri/              Tauriのアプリと、OS・機器に依存する実装（ウィンドウの取り込み、オーバーレイ、映像と姿勢のスレッド）
+│  ├─ native/              OpenVRのC++ APIの薄い層
+│  ├─ vendor/openvr/       OpenVR SDKのヘッダーとDLL
+│  └─ resources/openvr/    位置合わせの入力の定義
 ├─ scripts/                checkコマンドの部品、書体のコピー、疑似ロケールの生成
 ├─ docs/brand/             brand.md、icon_master.svg（roadmap/specs/ のコピー。版番号なし）
 └─ roadmap/                計画と記録（下記）

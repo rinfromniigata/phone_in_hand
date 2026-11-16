@@ -4,6 +4,7 @@
 //! OS・機器に依存する実装は `src-tauri` に置く。各トレイトのテスト用の偽の実装は [`fake`] にある。
 
 pub mod adb;
+pub mod calibration;
 pub mod error;
 pub mod fake;
 pub mod frame;

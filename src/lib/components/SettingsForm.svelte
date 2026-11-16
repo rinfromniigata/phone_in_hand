@@ -6,8 +6,11 @@
 	 *   保存せずに離れたら何も変わらない（imple 7章）
 	 * - 一般（言語・テーマ・起動の設定）：保存ボタンはなく、変えた時点で保存し、すぐに適用する
 	 * - スペック9a節：S03bのアバター用パッケージの要素は表示しない。S03cの末尾にライセンスのリンクを置く
-	 * - 取り込み方法を変えたときの映像のページ（T3-7・T4-2・T7-3）と、ロック解除の案内（T6-3）はあとでつなぐ
+	 * - 取り込み方法をウィンドウに変えたら、ウィンドウを取り込むページ（S01g）を単独で開く。
+	 *   HDMIキャプチャ（T4-2）・ミラーリング（T7-3）のページと、ロック解除の案内（T6-3）はあとでつなぐ
 	 */
+	import { goto } from '$app/navigation';
+	import { resolve } from '$app/paths';
 	import { Button, Select, SelectItem, TextInput } from 'carbon-components-svelte';
 	import Banner from './Banner.svelte';
 	import LicenseDialog from './LicenseDialog.svelte';
@@ -86,6 +89,14 @@
 
 	let licensesOpen = $state(false);
 	const selectValue = (e: Event) => (e.currentTarget as HTMLSelectElement).value;
+
+	// 取り込み方法を変えたら、その方法の映像のページを単独で開く（そこで選んで保存する）。
+	// HDMIキャプチャ（T4-2）とAndroidのミラーリング（T7-3）のページはあとでつなぐ
+	function openSourcePage(e: Event) {
+		const next = selectValue(e);
+		if (next === app.settings.video.source) return;
+		if (next === 'window') goto(resolve('/video/window'));
+	}
 </script>
 
 <Tabs {tabs} bind:selected={tab} label={m['nav.settings']()}>
@@ -109,7 +120,7 @@
 					<span>{m['settings.display.brightness']()}</span>
 					<input type="range" class="range" min="0" max="100" step="1" bind:value={draft.brightness_pct} />
 				</label>
-				<Select labelText={m['video.source_label']()} bind:selected={draft.video_source}>
+				<Select labelText={m['video.source_label']()} bind:selected={draft.video_source} on:change={openSourcePage}>
 					<SelectItem value="hdmi" text={m['video.source.hdmi']()} />
 					{#if app.phoneKind !== 'iphone' || draft.video_source === 'mirror'}
 						<SelectItem value="mirror" text={m['video.source.mirror']()} />

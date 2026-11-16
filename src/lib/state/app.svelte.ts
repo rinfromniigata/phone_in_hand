@@ -7,7 +7,7 @@
  */
 import { api, inTauri } from './api.ts';
 import defaultSettings from './default_settings.json';
-import type { AppSnapshot, Settings, SettingsPatch } from './types.ts';
+import type { AppSnapshot, PreviewFrame, Settings, SettingsPatch } from './types.ts';
 
 /** 機器の状態がまだ届いていない、またはTauriの外のときの状態 */
 const UNAVAILABLE: AppSnapshot = {
@@ -49,10 +49,18 @@ class AppStore {
 	localeOverride = $state<string | null>(null);
 	settings = $state<Settings>(clone(defaultSettings as Settings));
 	ready = $state(false);
+	/** 映像のプレビューの最新の1枚（取り込みが動いていなければ null） */
+	#preview = $state.raw<PreviewFrame | null>(null);
 
 	/** 画面に出す状態（見本があれば見本） */
 	get snapshot(): AppSnapshot {
 		return this.sample ?? this.#live;
+	}
+
+	/** 画面に出すプレビュー。見本の表示中と、映像が止まっているときは出さない */
+	get preview(): PreviewFrame | null {
+		if (this.sample) return null;
+		return this.#live.video.state === 'running' ? this.#preview : null;
 	}
 
 	/** 画面に出すスマホの種類（見本があれば見本の値） */
@@ -68,7 +76,11 @@ class AppStore {
 	async init(): Promise<void> {
 		if (this.ready) return;
 		if (inTauri()) {
-			await api.onStateChanged((s) => (this.#live = s));
+			await api.onStateChanged((s) => {
+				this.#live = s;
+				if (s.video.state !== 'running') this.#preview = null;
+			});
+			await api.onPreviewFrame((f) => (this.#preview = f));
 			const [settings, snapshot] = await Promise.all([api.getSettings(), api.getSnapshot()]);
 			this.settings = settings;
 			this.#live = snapshot;

@@ -1,0 +1,33 @@
+{
+  "default_bindings": [
+    { "controller_type": "knuckles", "binding_url": "bindings_knuckles.json" },
+    { "controller_type": "oculus_touch", "binding_url": "bindings_oculus_touch.json" },
+    { "controller_type": "vive_controller", "binding_url": "bindings_vive_controller.json" },
+    { "controller_type": "holographic_controller", "binding_url": "bindings_holographic_controller.json" }
+  ],
+  "actions": [
+    { "name": "/actions/calibrate/in/grab", "type": "boolean", "requirement": "suggested" },
+    { "name": "/actions/calibrate/in/confirm", "type": "boolean", "requirement": "suggested" }
+  ],
+  "action_sets": [{ "name": "/actions/calibrate", "usage": "leftright" }],
+  "localization": [
+    {
+      "language_tag": "en_US",
+      "/actions/calibrate": "Calibration",
+      "/actions/calibrate/in/grab": "Grab the sample screen",
+      "/actions/calibrate/in/confirm": "Confirm the position"
+    },
+    {
+      "language_tag": "ja_JP",
+      "/actions/calibrate": "位置合わせ",
+      "/actions/calibrate/in/grab": "画面の見本をつかむ",
+      "/actions/calibrate/in/confirm": "位置を決定する"
+    },
+    {
+      "language_tag": "zh_CN",
+      "/actions/calibrate": "位置校准",
+      "/actions/calibrate/in/grab": "抓住屏幕样本",
+      "/actions/calibrate/in/confirm": "确定位置"
+    }
+  ]
+}

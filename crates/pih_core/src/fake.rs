@@ -54,6 +54,10 @@ impl FrameProcessor for FakeFrameProcessor {
             screen_off: false,
         }
     }
+    fn set_crop(&mut self, _crop: crate::settings::CropSettings) {}
+    fn tick(&mut self, _now: Instant) -> Option<FrameInfo> {
+        None
+    }
 }
 
 /// 決まった姿勢を返す（`None` なら追跡が切れている）

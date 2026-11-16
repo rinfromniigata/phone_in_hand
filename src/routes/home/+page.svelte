@@ -1,5 +1,7 @@
 <script lang="ts">
 	// ホーム（S02・S02a〜c）：VRに表示のスイッチ、接続の状態の5つの行、映像のプレビュー、位置を合わせ直すボタン
+	import { goto } from '$app/navigation';
+	import { resolve } from '$app/paths';
 	import { Button } from 'carbon-components-svelte';
 	import PageTitle from '#lib/components/PageTitle.svelte';
 	import SwitchField from '#lib/components/SwitchField.svelte';
@@ -54,13 +56,15 @@
 	</section>
 	<div class="field">
 		<span>{m['home.preview']()}</span>
-		<VideoPreview placeholder={import.meta.env.DEV && app.sample && app.snapshot.video.state === 'running' ? fake : undefined} />
+		<VideoPreview
+			frame={app.preview}
+			placeholder={import.meta.env.DEV && app.sample && app.snapshot.video.state === 'running' ? fake : undefined}
+		/>
 	</div>
 </div>
 
 <div class="row end">
-	<!-- 位置合わせの画面（S01e）はT3-8でつなぐ。それまでは押せない -->
-	<Button kind="secondary" disabled>{m['home.recalibrate']()}</Button>
+	<Button kind="secondary" on:click={() => goto(resolve('/calibrate'))}>{m['home.recalibrate']()}</Button>
 </div>
 
 {#snippet fake()}

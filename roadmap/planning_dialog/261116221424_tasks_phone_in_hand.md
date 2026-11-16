@@ -58,33 +58,52 @@ Phaseの推奨: Sonnet・high以上
 
 ## Phase 3: オーバーレイの縦切りと位置合わせ
 Phaseの推奨: Opus・high以上
-- [ ] T3-1 【エージェント】オーバーレイの試作：`ovr_overlay`でSteamVRにつなぎ、D3D11のテクスチャをオーバーレイに出し、毎フレームの絶対配置で動かせるかを確かめる。足りない場合は、C++の薄いサイドカーへの切り替えを決め、実施メモに理由を書く
+引き継ぎ: T3-1〜T3-9は完了、checkコマンドは通過。次はW3-1。この環境にはSteamVRがなく、オーバーレイの表示・遅延・入力の既定の割り当て（`src-tauri/resources/openvr/`）・自動起動は未確認で、W3-3〜W3-6（ユーザー）で確かめる。設定の表示タブで取り込み方法を「ウィンドウ」に変えるとページへ移り、タブの未保存の変更は破棄される
+- [x] T3-1 【エージェント】オーバーレイの試作：`ovr_overlay`でSteamVRにつなぎ、D3D11のテクスチャをオーバーレイに出し、毎フレームの絶対配置で動かせるかを確かめる。足りない場合は、C++の薄いサイドカーへの切り替えを決め、実施メモに理由を書く
   - 依存: T2-2
-- [ ] T3-2 【エージェント】`window_capture_source`を実装する：Windows.Graphics.Capture APIでウィンドウをGPUのテクスチャとして受け取る。ウィンドウの一覧（`list_windows`）と、ウィンドウが閉じたときの状態
+  - 実施: Opus・high
+  - メモ: `ovr_overlay`は不足と判断し、C++の薄い層に切り替えた。理由：crates.ioの版は0.0.0（2022年）のままで、D3D11のテクスチャの設定（`SetOverlayTexture`）・機器の姿勢・`IVRInput`・`IVRApplications`のAPIがなく、ビルドにlibclang（autocxx 0.21）が要る。OpenVR SDK v2.15.6（BSD-3）の`openvr.h`と`openvr_api.dll`を`src-tauri/vendor/openvr/`に置き、`src-tauri/native/pih_openvr.cpp`を`cc`でアプリに組み込む（別プロセスにせず同じプロセスに置いた。姿勢とテクスチャを毎フレーム渡すため）。DLLは実行時に`LoadLibrary`で読むため、SteamVRがなくてもアプリは起動する。Rust側は`src-tauri/src/openvr.rs`。この環境にはSteamVRがなく、DLLの読み込みと関数の解決、接続の失敗の扱いまでを単体テストで確かめた。VRでの表示と遅延はW3-3で確かめる
+- [x] T3-2 【エージェント】`window_capture_source`を実装する：Windows.Graphics.Capture APIでウィンドウをGPUのテクスチャとして受け取る。ウィンドウの一覧（`list_windows`）と、ウィンドウが閉じたときの状態
   - 依存: T3-1
-- [ ] T3-3 【エージェント】`controller_pose_source`を実装する：左右のコントローラーの姿勢と追跡状態
+  - 実施: Opus・high
+  - メモ: `src-tauri/src/window_capture.rs`（WGC）と`gpu.rs`（D3D11のデバイス、ミップマップでの縮小と読み出し）。`windows` 0.62。ウィンドウは実行ファイル名を優先して探す（タイトルが変わっても続く）。閉じたら`error: source_lost`、見つからなければ`open_failed`。`Frame::Gpu`はテクスチャのポインタとフレームの保持者（`owner`）、間引いた縮小画像（200msごと、幅360以下）を持つ形にした。手元のウィンドウを取り込み、フレームと縮小画像が得られることを確かめた（`cargo test -- --ignored`の`captures_a_real_window`）
+- [x] T3-3 【エージェント】`controller_pose_source`を実装する：左右のコントローラーの姿勢と追跡状態
   - 推奨: Sonnet・high以上
   - 依存: T3-1
-- [ ] T3-4 【エージェント】`pose_fusion`のコントローラー固定を実装する：位置合わせのずれの適用、追跡が切れたら最後の姿勢に止めて薄く表示、戻れば元に戻す、`screen_off`なら隠す。単体テストで振る舞いを固定する
+  - 実施: Opus・high
+  - メモ: `src-tauri/src/controller_pose.rs`。姿勢はOpenVRの説明にある求め方で、次に表示されるときの予測の値を使う（`pih_openvr.cpp`の`pih_vr_controller_pose`）。接続がない・機器がない・`TrackingResult_Running_OK`でないときは`Lost`。OpenVRの3×4行列と`Pose`の変換は`pih_core::geometry`に置き、単体テストで固定した
+- [x] T3-4 【エージェント】`pose_fusion`のコントローラー固定を実装する：位置合わせのずれの適用、追跡が切れたら最後の姿勢に止めて薄く表示、戻れば元に戻す、`screen_off`なら隠す。単体テストで振る舞いを固定する
   - 依存: T1-4
-- [ ] T3-5 【エージェント】`frame_processor`を実装する：黒い余白の自動の切り抜きと手動の矩形、黒い画面と取り込み元の途絶の検出（間引いた縮小画像で判定）。単体テストを付ける
+  - 実施: Opus・high
+  - メモ: `crates/pih_core/src/pose.rs`。`PanelState`に`screen_off`と`has_pose`を足し、出すチップ（`Chip`、辞書の`vr.chip.*`に対応）を`PanelState::chip`で決める。位置合わせの結果がない・基準や側が合わないときは既定のずれ（`default_offset`：コントローラーの7cm上、上端を20度向こうへ）を使う。隠している間も姿勢は追い、まだ一度も姿勢がないときはチップも出さない。単体テスト6件
+- [x] T3-5 【エージェント】`frame_processor`を実装する：黒い余白の自動の切り抜きと手動の矩形、黒い画面と取り込み元の途絶の検出（間引いた縮小画像で判定）。単体テストを付ける
   - 推奨: Sonnet・high以上
   - 依存: T1-4
-- [ ] T3-6 【エージェント】`overlay_presenter`と映像・姿勢のスレッドを実装する：映像は`video_source`→`frame_processor`→`overlay_presenter`と直接渡し、GPUのフレームはCPUを経由しない。表示・薄く表示・非表示、大きさと明るさ、状態のチップの文言（辞書から）。ホームのスイッチとプレビュー（間引いたJPEG）をつなぐ
+  - 実施: Opus・high
+  - メモ: `crates/pih_core/src/frame.rs`の`BlackBarProcessor`。閾値は同じファイルの定数（黒＝明るさ24以下、黒い画面＝黒でない画素0.2%未満が1.5秒続く、切り抜き＝行・列の2%以上が黒でない範囲で、同じ候補が3回続いたら変える）。画面がつけばすぐ戻す。CPUのフレーム（Phase 4）は`Thumbnail::from_cpu`で縮小してから判定する（MJPEGは未対応）。取り込み元の途絶は、フレームが来ないこと（WGCは画面が変わらないと送らない）ではなく取り込みの状態で判定し、`frame::screen_off`にまとめた。単体テスト6件
+- [x] T3-6 【エージェント】`overlay_presenter`と映像・姿勢のスレッドを実装する：映像は`video_source`→`frame_processor`→`overlay_presenter`と直接渡し、GPUのフレームはCPUを経由しない。表示・薄く表示・非表示、大きさと明るさ、状態のチップの文言（辞書から）。ホームのスイッチとプレビュー（間引いたJPEG）をつなぐ
   - 依存: T3-2, T3-3, T3-4, T3-5
   - 画面: S04, S04a, S04c, S04e
-- [ ] T3-7 【エージェント】ウィンドウを取り込むページを実装する：ウィンドウの一覧、プレビューと切り抜きの範囲（自動・手動の矩形の調整）。設定の表示タブで取り込み方法をウィンドウに変えたときに単独で開く
+  - 実施: Opus・high
+  - メモ: `src-tauri/src/overlay.rs`（パネルとチップの2つのオーバーレイ。映像はGPUの中で共有テクスチャへ写し、切り抜きはテクスチャの範囲で指定）、`runtime.rs`（映像のスレッドと姿勢のスレッド。SteamVRへの接続・つなぎ直し・終了の受け入れも姿勢のスレッド）。`app_state`は`RuntimeLink`でスレッドへ設定を伝え、`on_runtime_event`で映像と追跡の状態を受ける。パネルとチップの寸法・薄く表示の不透明度は`pih_core::overlay`の定数。チップと位置合わせの見本の画像は、UIが辞書の文言とトークンの値でキャンバスに描いて`set_overlay_images`で渡す（`src/lib/vr/overlay_images.ts`。言語・テーマを変えると描き直す）。`start_video`は保存していない映像の設定（`video`）を受ける形にした。プレビューは`preview_frame`（切り抜く前の縮小画像のJPEGと切り抜きの範囲）で、ホームは切り抜いた範囲を出す。HDMIとミラーリングは「使用できません」のまま（Phase 4・7）。手元のウィンドウで、映像のスレッドが状態とプレビューを送ることを確かめた（`runs_with_a_real_window`）
+- [x] T3-7 【エージェント】ウィンドウを取り込むページを実装する：ウィンドウの一覧、プレビューと切り抜きの範囲（自動・手動の矩形の調整）。設定の表示タブで取り込み方法をウィンドウに変えたときに単独で開く
   - 推奨: Sonnet・high以上
   - 依存: T3-6
   - 画面: S01g, S03a
-- [ ] T3-8 【エージェント】位置合わせを実装する：位置合わせのページ（基準と側の選択、始める、VRで進行中の表示、終わると自動で進む）と、VRの中での見本の表示、もう一方のコントローラーでつかんで動かす操作、トリガーでの決定、`calibration.json`の保存。ホームの位置を合わせ直すボタンをつなぐ。途中でやめたら前の結果を残す
+  - 実施: Opus・high
+  - メモ: ページの本体は`src/lib/components/setup/WindowSource.svelte`（T5-3でステップ表示と「次へ」を差し込めるよう、`steps`・`actions`を受ける）、単独のページは`src/routes/video/window/`（「戻る」「保存」。保存で設定へ戻る）。選んだウィンドウと切り抜きは、保存前から`start_video`でプレビューに使い、離れると保存済みの設定に戻す。手動の範囲は`CropEditor.svelte`（ドラッグと、つまみの矢印キー）。取り込み方法の選択肢は`Segmented.svelte`で、HDMI・ミラーリングはページができるまで押せない。辞書に6キーを足した（`wizard.video.crop_edge_*`、`wizard.window.list_choose`・`list_empty`）。設定の表示タブは、保存済みと違う「ウィンドウ」を選んだ時点でこのページへ移る（タブの未保存の変更は破棄される）
+- [x] T3-8 【エージェント】位置合わせを実装する：位置合わせのページ（基準と側の選択、始める、VRで進行中の表示、終わると自動で進む）と、VRの中での見本の表示、もう一方のコントローラーでつかんで動かす操作、トリガーでの決定、`calibration.json`の保存。ホームの位置を合わせ直すボタンをつなぐ。途中でやめたら前の結果を残す
   - 依存: T3-6
   - 画面: S01e, S02
   - ハンドトラッキングの選択肢は、手の追跡がない間は選べない状態で示す（T9-4で使えるようにする）
-- [ ] T3-9 【エージェント】起動の設定を実装する：SteamVRと一緒に起動する（アプリのマニフェストの登録と解除）、起動時にウィンドウを最小化する
+  - 実施: Opus・high
+  - メモ: 手順は`crates/pih_core/src/calibration.rs`（つかんでいる間はもう一方のコントローラーに付けて動かし、放すとスマホ側に付いたまま残る。トリガーは押した瞬間だけ決定にし、始めた時点で押していたものは離すまで無視。単体テスト5件）。姿勢のスレッドが入力（`IVRInput`。定義は`src-tauri/resources/openvr/`の`actions.json`と、Index・Touch・Vive・WMRの既定の割り当て）を読み、見本は表示のスイッチや画面の状態によらず出す（映像がなければUIが描いた見本の画像）。決定すると`calibration.json`を上書きし、選んだ基準と側を設定に保存して、`calibration_progress`で知らせる。ページは`src/lib/components/setup/Calibrate.svelte`と`src/routes/calibrate/`（戻る・離れるとやめて前の結果を残す）。ホームの「位置を合わせ直す」をつなぎ、位置合わせの結果が古い・ないときの帯を足した。辞書に3キーを足し、`wizard.calibrate.vr_hint`の言い回しに、グリップでつかんで動かすことを加えた。SteamVRがないため、VRでの操作と既定の割り当てはW3-4で確かめる
+- [x] T3-9 【エージェント】起動の設定を実装する：SteamVRと一緒に起動する（アプリのマニフェストの登録と解除）、起動時にウィンドウを最小化する
   - 推奨: Sonnet・high以上
   - 依存: T3-1
   - 画面: S03c
+  - 実施: Opus・high
+  - メモ: `src-tauri/src/startup.rs`。起動のたびに、今の実行ファイルの場所で`phone_in_hand.vrmanifest`をアプリデータのフォルダに書き（アプリ名は辞書の`app.name`をビルド時に読む）、設定がオンならSteamVRに登録して自動起動を有効に、オフなら自動起動を切って登録を解除する。合わせるのは、設定を変えたときとSteamVRにつながったとき（つながっていない間の変更は次の接続で反映）。起動時の最小化は`setup`でメインのウィンドウを最小化する。SteamVRから起動されたときに2つ目のアプリが立ち上がるのを防ぐ仕組み（単一インスタンス）はない。あわせて、`CONTRIBUTING.md`にOpenVRの層・入力の定義・手元でのテストを、ライセンスの一覧にOpenVR SDKを足した。fix: `roadmap/development/261116232120_fix_phase3.md`（変化のないウィンドウでプレビューと黒い画面の判定が進まない）
 
 ## Phase 4: HDMIキャプチャ
 Phaseの推奨: Opus・high以上

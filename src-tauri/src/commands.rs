@@ -3,13 +3,14 @@
 //! 失敗はUIへ `{ "code": "unavailable" }` のような識別子だけで返し、文言はUIの辞書で引く。
 use pih_core::adb::{AdbTarget, DeviceInfo};
 use pih_core::error::ErrorCode;
-use pih_core::settings::Settings;
+use pih_core::settings::{PoseSettings, Settings, VideoSettings};
 use pih_core::snapshot::AppSnapshot;
-use pih_core::video::{CaptureDevice, VideoSourceKind, WindowInfo};
+use pih_core::video::{CaptureDevice, WindowInfo};
 use serde::Serialize;
 use tauri::State;
 
 use crate::app_state::AppState;
+use crate::overlay::OverlayImages;
 
 #[derive(Debug, Serialize)]
 pub struct CommandError {
@@ -53,8 +54,9 @@ pub fn set_display_enabled(state: State<'_, AppState>, enabled: bool) -> CmdResu
 }
 
 #[tauri::command]
-pub fn list_capture_devices(state: State<'_, AppState>) -> CmdResult<Vec<CaptureDevice>> {
-    Ok(state.list_capture_devices()?)
+pub fn list_capture_devices() -> CmdResult<Vec<CaptureDevice>> {
+    // T4-1で実装する
+    unavailable()
 }
 
 #[tauri::command]
@@ -62,9 +64,16 @@ pub fn list_windows(state: State<'_, AppState>) -> CmdResult<Vec<WindowInfo>> {
     Ok(state.list_windows()?)
 }
 
+/// 保存していない映像の設定で取り込む（映像のページのプレビュー）
 #[tauri::command]
-pub fn start_video(state: State<'_, AppState>, source: VideoSourceKind) -> CmdResult<()> {
-    Ok(state.start_video(source)?)
+pub fn start_video(state: State<'_, AppState>, video: VideoSettings) -> CmdResult<()> {
+    Ok(state.start_video(&video)?)
+}
+
+/// UIが描いたVR内のチップと位置合わせの見本の画像
+#[tauri::command]
+pub fn set_overlay_images(state: State<'_, AppState>, images: OverlayImages) -> CmdResult<()> {
+    Ok(state.set_overlay_images(images)?)
 }
 
 #[tauri::command]
@@ -94,22 +103,22 @@ pub fn sensor_qr_payload() -> CmdResult<String> {
     unavailable()
 }
 
-/// T3-8で実装する
+/// 位置合わせを始める（S01e）。SteamVRとつながっていなければ `unavailable`
 #[tauri::command]
-pub fn start_calibration() -> CmdResult<()> {
-    unavailable()
+pub fn start_calibration(state: State<'_, AppState>, pose: PoseSettings) -> CmdResult<()> {
+    Ok(state.start_calibration(pose)?)
 }
 
-/// T3-8で実装する
+/// 位置合わせを、今の見本の位置で決定する
 #[tauri::command]
-pub fn finish_calibration() -> CmdResult<()> {
-    unavailable()
+pub fn finish_calibration(state: State<'_, AppState>) -> CmdResult<()> {
+    Ok(state.finish_calibration()?)
 }
 
-/// T3-8で実装する
+/// 位置合わせをやめる。前の結果は残す
 #[tauri::command]
-pub fn cancel_calibration() -> CmdResult<()> {
-    unavailable()
+pub fn cancel_calibration(state: State<'_, AppState>) {
+    state.cancel_calibration();
 }
 
 #[tauri::command]

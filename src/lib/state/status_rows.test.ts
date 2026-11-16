@@ -60,6 +60,15 @@ describe('status_rows（状態ごとの文字と色）', () => {
 		expect(second.map((r) => r.tone)).toEqual(['err', 'off', 'off', 'off', 'off']);
 	});
 
+	test('位置合わせの結果が使えないときは、合わせ直しを促す帯が出る', () => {
+		const base = sample('S02a').snapshot;
+		const ids = (calibration: AppSnapshot['calibration']) =>
+			banners({ ...base, calibration }, 'android').map((b) => [b.id, b.tone]);
+		expect(ids('valid')).toEqual([]);
+		expect(ids('stale')).toEqual([['calibration_stale', 'warn']]);
+		expect(ids('missing')).toEqual([['calibration_missing', 'info']]);
+	});
+
 	test('位置の追跡の補足は、基準と側に対応する', () => {
 		const base = sample('S02a').snapshot;
 		const detail = (mode: 'controller' | 'hand', side: 'left' | 'right') =>

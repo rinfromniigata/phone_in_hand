@@ -1,4 +1,5 @@
 //! 映像の取り込み（`video_source`）
+use std::any::Any;
 use std::sync::Arc;
 use std::time::Duration;
 
@@ -7,10 +8,94 @@ use serde::{Deserialize, Serialize};
 use crate::Result;
 use crate::geometry::Size;
 
-/// D3D11の共有テクスチャ。`src-tauri` の実装が作る、プロセス内で有効なハンドル（DXGIの共有ハンドルの値）
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+/// D3D11のテクスチャ。`src-tauri` の実装が作る、同じプロセスの中で有効な `ID3D11Texture2D` のポインタ。
+/// `owner`（取り込みのフレームなど）が生きている間だけ有効で、受け取った側は保持し続けない
+#[derive(Clone)]
 pub struct SharedTexture {
-    pub handle: u64,
+    pub ptr: usize,
+    pub owner: Arc<dyn Any + Send + Sync>,
+}
+
+impl std::fmt::Debug for SharedTexture {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        f.debug_struct("SharedTexture")
+            .field("ptr", &format_args!("{:#x}", self.ptr))
+            .finish()
+    }
+}
+
+/// 間引いて縮小した画像（BGRA、1画素4バイト、行の詰めなし）。
+/// 黒い画面と余白の判定（`frame_processor`）と、UIのプレビューに使う
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct Thumbnail {
+    pub size: Size,
+    pub bgra: Vec<u8>,
+}
+
+impl Thumbnail {
+    /// 画素の明るさ（0〜255。BT.601の近似）
+    pub fn luma(&self, x: u32, y: u32) -> u8 {
+        let i = ((y * self.size.width + x) * 4) as usize;
+        let (b, g, r) = (
+            self.bgra[i] as u32,
+            self.bgra[i + 1] as u32,
+            self.bgra[i + 2] as u32,
+        );
+        ((r * 77 + g * 150 + b * 29) >> 8) as u8
+    }
+
+    /// CPUのフレームから、幅が `max_width` 以下になるよう間引いて作る。MJPEGは扱わない（`None`）
+    pub fn from_cpu(format: PixelFormat, size: Size, data: &[u8], max_width: u32) -> Option<Self> {
+        if size.width == 0 || size.height == 0 || max_width == 0 {
+            return None;
+        }
+        let step = size.width.div_ceil(max_width).max(1);
+        let tw = size.width / step;
+        let th = size.height / step;
+        if tw == 0 || th == 0 {
+            return None;
+        }
+        let (w, h) = (size.width as usize, size.height as usize);
+        let needed = match format {
+            PixelFormat::Bgra8 => w * h * 4,
+            PixelFormat::Yuy2 => w * h * 2,
+            PixelFormat::Nv12 => w * h * 3 / 2,
+            PixelFormat::Mjpeg => return None,
+        };
+        if data.len() < needed {
+            return None;
+        }
+        let mut bgra = Vec::with_capacity((tw * th * 4) as usize);
+        for ty in 0..th {
+            for tx in 0..tw {
+                let (x, y) = ((tx * step) as usize, (ty * step) as usize);
+                let px = match format {
+                    PixelFormat::Bgra8 => {
+                        let i = (y * w + x) * 4;
+                        [data[i], data[i + 1], data[i + 2], 255]
+                    }
+                    // 判定には明るさだけを使うため、灰色にする
+                    PixelFormat::Yuy2 => {
+                        let l = data[(y * w + x) * 2];
+                        [l, l, l, 255]
+                    }
+                    PixelFormat::Nv12 => {
+                        let l = data[y * w + x];
+                        [l, l, l, 255]
+                    }
+                    PixelFormat::Mjpeg => unreachable!(),
+                };
+                bgra.extend_from_slice(&px);
+            }
+        }
+        Some(Thumbnail {
+            size: Size {
+                width: tw,
+                height: th,
+            },
+            bgra,
+        })
+    }
 }
 
 /// CPUのフレームの画素の形式（UVC）
@@ -26,8 +111,12 @@ pub enum PixelFormat {
 /// 1枚の映像。GPUのフレームはテクスチャのまま渡し、CPUを経由しない
 #[derive(Debug, Clone)]
 pub enum Frame {
-    /// D3D11の共有テクスチャ（WGC、MFデコーダー）
-    Gpu { texture: SharedTexture, size: Size },
+    /// D3D11のテクスチャ（WGC、MFデコーダー）。縮小画像は間引いたフレームにだけ付く
+    Gpu {
+        texture: SharedTexture,
+        size: Size,
+        thumbnail: Option<Arc<Thumbnail>>,
+    },
     /// UVC（MJPEG・NV12・YUY2など）。GPUへのアップロードは1回だけにする
     Cpu {
         format: PixelFormat,
@@ -128,4 +217,47 @@ pub struct CaptureMode {
 pub struct WindowInfo {
     pub title: String,
     pub executable: String,
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn thumbnail_from_bgra_is_subsampled() {
+        let size = Size {
+            width: 8,
+            height: 4,
+        };
+        // 左半分が白、右半分が黒
+        let mut data = vec![0u8; 8 * 4 * 4];
+        for y in 0..4 {
+            for x in 0..4 {
+                let i = (y * 8 + x) * 4;
+                data[i..i + 4].copy_from_slice(&[255, 255, 255, 255]);
+            }
+        }
+        let t = Thumbnail::from_cpu(PixelFormat::Bgra8, size, &data, 4).unwrap();
+        assert_eq!(
+            t.size,
+            Size {
+                width: 4,
+                height: 2
+            }
+        );
+        assert_eq!(t.luma(0, 0), 255);
+        assert_eq!(t.luma(3, 1), 0);
+    }
+
+    #[test]
+    fn thumbnail_rejects_short_data_and_mjpeg() {
+        let size = Size {
+            width: 4,
+            height: 4,
+        };
+        assert!(Thumbnail::from_cpu(PixelFormat::Nv12, size, &[0; 10], 4).is_none());
+        assert!(Thumbnail::from_cpu(PixelFormat::Mjpeg, size, &[0; 100], 4).is_none());
+        let t = Thumbnail::from_cpu(PixelFormat::Nv12, size, &[200; 24], 4).unwrap();
+        assert_eq!(t.luma(1, 1), 200);
+    }
 }

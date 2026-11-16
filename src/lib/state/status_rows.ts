@@ -23,7 +23,11 @@ export type StatusRow = {
 	state: string;
 };
 
-export type Banner = { id: 'sensor_lost' | 'iphone'; tone: 'warn' | 'info'; text: string };
+export type Banner = {
+	id: 'sensor_lost' | 'iphone' | 'calibration_stale' | 'calibration_missing';
+	tone: 'warn' | 'info';
+	text: string;
+};
 
 type Part = Pick<StatusRow, 'tone' | 'detail' | 'state'>;
 
@@ -140,6 +144,12 @@ export function banners(snapshot: AppSnapshot, phoneKind: Settings['phone_kind']
 	}
 	if (phoneKind === 'iphone') {
 		list.push({ id: 'iphone', tone: 'info', text: m['home.info.iphone']() });
+	}
+	// 位置合わせの結果が使えないときは、合わせ直しを促す（imple 7章「位置合わせのやり直し」）
+	if (snapshot.calibration === 'stale') {
+		list.push({ id: 'calibration_stale', tone: 'warn', text: m['home.warn.calibration_stale']() });
+	} else if (snapshot.calibration === 'missing') {
+		list.push({ id: 'calibration_missing', tone: 'info', text: m['home.info.calibration_missing']() });
 	}
 	return list;
 }

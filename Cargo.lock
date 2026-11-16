@@ -1693,6 +1693,12 @@ dependencies = [
 ]
 
 [[package]]
+name = "jpeg-encoder"
+version = "0.7.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "a0370574b86f7eca156b9f298392b5e69a23f8c86f3f865add60bbc2e79467a6"
+
+[[package]]
 name = "js-sys"
 version = "0.3.107"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2404,6 +2410,9 @@ dependencies = [
 name = "phone_in_hand"
 version = "0.1.0"
 dependencies = [
+ "base64 0.23.1",
+ "cc",
+ "jpeg-encoder",
  "log",
  "pih_core",
  "serde",
@@ -2412,6 +2421,9 @@ dependencies = [
  "tauri-build",
  "tauri-plugin-log",
  "tauri-plugin-os",
+ "tempfile",
+ "thiserror 2.0.21",
+ "windows",
 ]
 
 [[package]]

@@ -25,6 +25,13 @@ export const licenses: readonly LicenseEntry[] = [
 		url: 'https://github.com/Genymobile/scrcpy'
 	},
 	{
+		name: 'OpenVR SDK',
+		version: '2.15.6',
+		license: 'BSD-3-Clause',
+		copyright: ['Copyright (c) 2015, Valve Corporation'],
+		url: 'https://github.com/ValveSoftware/openvr'
+	},
+	{
 		name: 'IBM Plex Sans',
 		version: '1.1.0',
 		license: 'OFL-1.1',

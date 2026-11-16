@@ -1,7 +1,6 @@
 {
 	"$comment": "未実装の画面で使う予定の辞書キー。その画面を実装してキーを使ったら、ここから消す（scripts/check_i18n.ts が、使われているのに残っているキーを指摘する）。キーは最初に現れたモックの画面IDで分けた",
 	"S01": [
-		"common.back",
 		"common.next",
 		"common.retry",
 		"unlock.android_extend",
@@ -15,11 +14,6 @@
 		"unlock.ios_watch",
 		"unlock.power_warn",
 		"unlock.title",
-		"wizard.calibrate.desc",
-		"wizard.calibrate.in_progress",
-		"wizard.calibrate.start",
-		"wizard.calibrate.title",
-		"wizard.calibrate.vr_hint",
 		"wizard.mirror.codec_auto",
 		"wizard.mirror.codec_label",
 		"wizard.mirror.conn_usb",
@@ -45,31 +39,18 @@
 		"wizard.step.phone",
 		"wizard.step.video",
 		"wizard.step.vrchat",
-		"wizard.video.crop_auto",
-		"wizard.video.crop_hint",
 		"wizard.video.desc",
 		"wizard.video.device_label",
 		"wizard.video.mirror_hint",
 		"wizard.video.not_found_desc",
 		"wizard.video.not_found_title",
-		"wizard.video.preview_label",
 		"wizard.video.resolution_label",
-		"wizard.video.title",
 		"wizard.vrchat.check_avatar",
 		"wizard.vrchat.check_avatar_detail",
 		"wizard.vrchat.check_osc",
 		"wizard.vrchat.desc",
 		"wizard.vrchat.guide_link",
 		"wizard.vrchat.skip",
-		"wizard.vrchat.title",
-		"wizard.window.desc",
-		"wizard.window.hint",
-		"wizard.window.list_label"
-	],
-	"S04": [
-		"vr.chip.hand_lost",
-		"vr.chip.screen_off",
-		"vr.chip.sensor_lost",
-		"vr.chip.tracking"
+		"wizard.vrchat.title"
 	]
 }
